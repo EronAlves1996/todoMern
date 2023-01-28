@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function Index() {
   const [count, setCount] = useState(0);
@@ -13,7 +14,7 @@ function Index() {
         <button type="submit">Login</button>
       </form>
       <a href="">Esqueceu sua senha?</a>
-      <a href="">Criar nova conta</a>
+      <Link to="/registrar">Criar nova conta</Link>
     </>
   );
 }

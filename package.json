@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "workspaces": [
-    "./packages/back",
-    "./packages/front"
+    
   ]
 }

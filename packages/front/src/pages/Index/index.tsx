@@ -1,20 +1,47 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { LabeledInput } from "../../shared/LabeledInput";
 
 function Index() {
-  const [count, setCount] = useState(0);
+  const {
+    register,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const locationStateMsg = location.state.msg;
+
+  const login: SubmitHandler<FieldValues> = (data) => {
+    navigate("/home");
+  };
 
   return (
     <>
-      <form action="">
-        <label htmlFor="">E-mail</label>
-        <input type="text" name="email" id="email" />
-        <label htmlFor="">Senha</label>
-        <input type="password" name="password" id="password" />
-        <button type="submit">Login</button>
+      {locationStateMsg && <p>{locationStateMsg}</p>}
+      <form onSubmit={handleSubmit(login)}>
+        <LabeledInput
+          label="E-mail"
+          name="email"
+          type="email"
+          {...{ register }}
+        />
+        <LabeledInput
+          label="Senha"
+          name="password"
+          type="password"
+          {...{ register }}
+        />
+        <button type="submit" disabled={!isValid}>
+          Login
+        </button>
       </form>
-      <a href="">Esqueceu sua senha?</a>
-      <Link to="/registrar">Criar nova conta</Link>
+      <div>
+        <a href="">Esqueceu sua senha?</a>
+      </div>
+      <div>
+        <Link to="/registrar">Criar nova conta</Link>
+      </div>
     </>
   );
 }

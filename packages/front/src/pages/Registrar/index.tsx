@@ -2,7 +2,9 @@ import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { graphql, useMutation } from "react-relay";
 import { useNavigate } from "react-router-dom";
-import { LabeledInput, NewPasswordForm } from "./components";
+import { PayloadError } from "relay-runtime";
+import { LabeledInput } from "../../shared/LabeledInput";
+import { NewPasswordForm } from "./components";
 
 const registrarMutation = graphql`
   mutation RegistrarMutation($user: UserInput) {
@@ -34,16 +36,19 @@ export default function Registrar() {
 
   const submit: SubmitHandler<FieldValues> = (data) => {
     const { name, email, password } = data;
-    const user = { name, email, password };
+    const variables = { user: { name, email, password } };
+
+    const forwardHandleOnCompleted = (
+      response: {},
+      errors: PayloadError[] | null
+    ) => {
+      console.log(response);
+      navigate("/", { state: { msg: "Usuário registrado com sucesso" } });
+    };
 
     commit({
-      variables: {
-        user,
-      },
-      onCompleted(response, errors) {
-        console.log(response);
-        navigate("/", { state: { msg: "Usuário registrado com sucesso" } });
-      },
+      variables,
+      onCompleted: forwardHandleOnCompleted,
     });
   };
 

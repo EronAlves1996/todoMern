@@ -1,4 +1,31 @@
-# Replace this with your own GraphQL schema file!
-type Query {
-  field: String
+schema {
+  query: Query
+  mutation: mutation
 }
+
+"""Exposes a URL that specifies the behavior of this scalar."""
+directive @specifiedBy(
+  """The URL that specifies the behavior of this scalar."""
+  url: String!
+) on SCALAR
+
+type mutation {
+  createUser(user: UserInput): UserOutput
+}
+
+type Query {
+  getTest: String
+}
+
+input UserInput {
+  email: String!
+  password: String!
+  name: String!
+}
+
+type UserOutput {
+  _id: String!
+  email: String!
+  name: String!
+}
+

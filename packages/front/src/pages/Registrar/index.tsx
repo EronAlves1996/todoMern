@@ -41,6 +41,7 @@ export default function Registrar() {
         user,
       },
       onCompleted(response, errors) {
+        console.log(response);
         navigate("/", { state: { msg: "Usuário registrado com sucesso" } });
       },
     });

@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 import App from "./App";
 import Index from "./pages/Index";
-import { Registrar } from "./pages/Registrar";
+import Registrar from "./pages/Registrar";
 
 export const routes = createBrowserRouter(
   createRoutesFromElements(

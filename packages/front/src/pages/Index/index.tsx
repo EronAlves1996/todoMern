@@ -1,6 +1,17 @@
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { graphql, loadQuery } from "react-relay";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { RelayEnvironment } from "../../RelayEnvironment";
 import { LabeledInput } from "../../shared/LabeledInput";
+
+const loginAs = graphql`
+query IndexQuery($email: String!, $password!){
+  login(email: $email, password: $password){
+    _id
+  }
+}
+
+`;
 
 function Index() {
   const {
@@ -13,7 +24,9 @@ function Index() {
   const locationStateMsg = location.state.msg;
 
   const login: SubmitHandler<FieldValues> = (data) => {
-    navigate("/home");
+    const { email, password } = data;
+    const query = loadQuery(RelayEnvironment, loginAs, { email, password });
+    navigate("/home", { state: { query } });
   };
 
   return (

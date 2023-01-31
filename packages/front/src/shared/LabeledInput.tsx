@@ -7,9 +7,9 @@ export function LabeledInput({
   register,
 }: LabeledInputProps) {
   return (
-    <>
+    <div>
       <label htmlFor={name}>{label}</label>
       <input {...{ type, ...register(name, { required: true }) }} />
-    </>
+    </div>
   );
 }

@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import { graphqlMiddleware } from "./graphqlMiddleware";
+import graphqlMiddleware from "./graphqlMiddleware";
 
 const app = express();
 

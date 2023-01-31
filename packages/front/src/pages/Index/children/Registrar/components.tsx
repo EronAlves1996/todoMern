@@ -1,4 +1,4 @@
-import { LabeledInput } from "../../shared/LabeledInput";
+import { LabeledInput } from "../../../../shared/LabeledInput";
 import { NewPasswordFormProps } from "./types";
 
 export function NewPasswordForm({

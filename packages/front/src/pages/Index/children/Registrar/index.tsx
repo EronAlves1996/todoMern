@@ -3,7 +3,7 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { graphql, useMutation } from "react-relay";
 import { useNavigate } from "react-router-dom";
 import { PayloadError } from "relay-runtime";
-import { LabeledInput } from "../../shared/LabeledInput";
+import { LabeledInput } from "../../../../shared/LabeledInput";
 import { NewPasswordForm } from "./components";
 
 const registrarMutation = graphql`

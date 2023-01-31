@@ -1,13 +1,17 @@
 import express from "express";
 import mongoose from "mongoose";
 import graphqlMiddleware from "./graphqlMiddleware";
+import loginMiddleware from "./loginMiddleware";
 
 const app = express();
+
+app.post("/login", loginMiddleware);
+
+app.all("/graphql", graphqlMiddleware);
 
 (async () => {
   await mongoose.connect("mongodb://localhost:27017/todo");
   console.log("Connected to database");
-  app.use("/graphql", graphqlMiddleware);
   app.listen(3001);
   console.log("App listening on 3001");
 })();

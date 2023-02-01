@@ -3,27 +3,11 @@ import { sha256 } from "js-sha256";
 import { userModel } from "./graphqlMiddleware";
 import * as jwt from "jsonwebtoken";
 import { LeanDocument, Types } from "mongoose";
+import configuration from "./config";
+import { send403 } from "./httpUtils";
+import { erasePasswordInformation } from "./userUtils";
 
-type leanUserMongooseDoc =
-  | (LeanDocument<{
-      _id?: Types.ObjectId | undefined;
-      email?: string | undefined;
-      password?: string | undefined;
-      name?: string | undefined;
-    }> &
-      Required<{
-        _id: Types.ObjectId;
-      }>)
-  | undefined;
-
-function send403(res: Response) {
-  res.status(403);
-  res.header(
-    "WWW-Authenticate",
-    'Basic realm="Access to private resources" charset="UTF-8"'
-  );
-  res.send();
-}
+const WEEK = 60 * 60 * 24 * 7;
 
 function unencodeCredentials(authorization: string) {
   const encodedCredentials = authorization?.split(" ")[1];
@@ -34,10 +18,6 @@ function unencodeCredentials(authorization: string) {
 
 async function findUser(email: string, password: string) {
   return await userModel.findOne({ email, password });
-}
-
-function erasePasswordInformation(user: leanUserMongooseDoc) {
-  return { _id: user?._id, name: user?.name, email: user?.email };
 }
 
 const loginMiddleware = async (req: Request, res: Response) => {
@@ -58,8 +38,9 @@ const loginMiddleware = async (req: Request, res: Response) => {
   const userAsObject = erasePasswordInformation(findedUser?.toObject());
 
   res.cookie(
-    "jwt-login",
-    jwt.sign(userAsObject._id?.toString() as string, "MERN")
+    configuration.COOKIE_NAME,
+    jwt.sign(userAsObject._id?.toString() as string, configuration.JWT_SECRET),
+    { httpOnly: true, maxAge: 1 * WEEK }
   );
   res.status(200);
   res.send(userAsObject);

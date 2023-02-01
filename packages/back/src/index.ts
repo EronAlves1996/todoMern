@@ -3,8 +3,11 @@ import mongoose from "mongoose";
 import graphqlMiddleware from "./middlewares/graphqlMiddleware";
 import loginMiddleware from "./middlewares/loginMiddleware";
 import verifyMiddlware from "./middlewares/verifyMiddleware";
+import cookieParser from "cookie-parser";
 
 const app = express();
+
+app.use(cookieParser());
 
 app.post("/login", loginMiddleware);
 app.get("/verify", verifyMiddlware);

@@ -1,5 +1,5 @@
-import { Suspense, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Suspense, useEffect, useState } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 type User = {
   _id: string;
@@ -14,6 +14,23 @@ export type userOutletContext = {
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user == null) {
+      fetch("/verify", {
+        credentials: "include",
+      })
+        .then((res) => {
+          if (res.ok) return res.json();
+          throw new Error("Cookie inválido");
+        })
+        .then((json) => setUser(json))
+        .catch((err) => {
+          navigate("/", { state: { msg: "Por favor, faça o login" } });
+        });
+    }
+  }, []);
 
   return (
     <Suspense fallback={<div>Loading...</div>}>

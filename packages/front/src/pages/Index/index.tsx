@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import {
   Link,
@@ -17,6 +18,9 @@ function Index() {
   const location = useLocation();
   const { user, setUser } = useOutletContext<userOutletContext>();
   const navigate = useNavigate();
+  if (user !== null) {
+    navigate("/home");
+  }
 
   const locationStateMsg = location.state?.msg;
 

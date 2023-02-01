@@ -1,5 +1,4 @@
-import { response } from "express";
-import { GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql";
+import { GraphQLObjectType, GraphQLSchema } from "graphql";
 import { createHandler } from "graphql-http/lib/use/express";
 import { model, Schema } from "mongoose";
 import { createUser, login, userInput, userOutput } from "./user";

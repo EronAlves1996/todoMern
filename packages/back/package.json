@@ -8,6 +8,7 @@
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^16.0.3",
     "express": "~4.16.1",
     "graphql": "^16.6.0",
     "graphql-http": "^1.13.0",

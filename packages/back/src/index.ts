@@ -1,8 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
-import graphqlMiddleware from "./graphqlMiddleware";
-import loginMiddleware from "./loginMiddleware";
-import verifyMiddlware from "./verifyMiddleware";
+import graphqlMiddleware from "./middlewares/graphqlMiddleware";
+import loginMiddleware from "./middlewares/loginMiddleware";
+import verifyMiddlware from "./middlewares/verifyMiddleware";
 
 const app = express();
 

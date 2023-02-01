@@ -1,23 +1,20 @@
 import { Request, Response } from "express";
 import { sha256 } from "js-sha256";
-import { userModel } from "./graphqlMiddleware";
 import * as jwt from "jsonwebtoken";
-import { LeanDocument, Types } from "mongoose";
-import configuration from "./config";
-import { send403 } from "./httpUtils";
-import { erasePasswordInformation } from "./userUtils";
+import configuration from "../config";
+import { send403 } from "./utils";
+import { erasePasswordInformation } from "../utils/userUtils";
+import userDbAccess from "../dbAccess/user";
 
 const WEEK = 60 * 60 * 24 * 7;
+
+const { findUserByEmailAndPassword } = userDbAccess;
 
 function unencodeCredentials(authorization: string) {
   const encodedCredentials = authorization?.split(" ")[1];
   return Buffer.from(encodedCredentials!, "base64")
     .toString("ascii")
     .split(":");
-}
-
-async function findUser(email: string, password: string) {
-  return await userModel.findOne({ email, password });
 }
 
 const loginMiddleware = async (req: Request, res: Response) => {
@@ -29,7 +26,7 @@ const loginMiddleware = async (req: Request, res: Response) => {
   const [email, password] = unencodeCredentials(authorization!);
   const hashedPassword = sha256(password);
 
-  const findedUser = await findUser(email, hashedPassword);
+  const findedUser = await findUserByEmailAndPassword(email, hashedPassword);
 
   if (findedUser == null) {
     send403(res);

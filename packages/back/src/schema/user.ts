@@ -7,6 +7,7 @@ import {
 } from "graphql";
 import { sha256 } from "js-sha256";
 import mongoose from "mongoose";
+import hashString from "../utils/hash";
 
 export const userInput = new GraphQLInputObjectType({
   name: "UserInput",
@@ -48,13 +49,17 @@ export const login: GraphQLFieldConfig<any, any, any> = {
     },
   },
   type: userOutput,
-  resolve: async (_, { email, password }, { loaders }) => {
-    const userLoader = loaders.user;
-    const hashedPassword = sha256(password);
-    const userFinded = await userLoader.findOne({
-      email,
-      password: hashedPassword,
-    });
+  resolve: async (
+    _,
+    { email, password },
+    {
+      loaders: {
+        userDbAccess: { findUserByEmailAndPassword },
+      },
+    }
+  ) => {
+    const hashedPassword = hashString(password);
+    const userFinded = await findUserByEmailAndPassword(email, hashedPassword);
     return userFinded?.toObject();
   },
 };
@@ -66,16 +71,21 @@ export const createUser: GraphQLFieldConfig<any, any, any> = {
     },
   },
   type: userOutput,
-  resolve: async (_, { user }, { loaders }) => {
-    const userLoader = loaders.user;
-    const hashedPassword = sha256(user.password);
-    const userToSave = new userLoader({
-      _id: new mongoose.Types.ObjectId(),
-      email: user.email,
+  resolve: async (
+    _,
+    { user: { email, password, name } },
+    {
+      loaders: {
+        userDbAccess: { createUser },
+      },
+    }
+  ) => {
+    const hashedPassword = hashString(password);
+    const userSaved = createUser({
+      email,
       password: hashedPassword,
-      name: user.name,
+      name,
     });
-    const userSaved = await userToSave.save();
     return userSaved.toObject();
   },
 };

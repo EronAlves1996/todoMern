@@ -16,16 +16,20 @@ async function verifyMiddlware(
   res: Response,
   next: NextFunction
 ) {
-  const cookie = req.cookies[configuration.COOKIE_NAME];
-  const userId = verify(cookie, configuration.JWT_SECRET) as string;
-  if (!userExistsById(userId)) {
+  try {
+    const cookie = req.cookies[configuration.COOKIE_NAME];
+    const userId = verify(cookie, configuration.JWT_SECRET) as string;
+    if (!userExistsById(userId)) {
+      throw new Error("Invalid cookie/user");
+    }
+    const user = await findById(userId);
+    const userWithoutPassword = erasePasswordInformation(user?.toObject());
+    res.status(200);
+    res.send(userWithoutPassword);
+  } catch (err) {
     invalidateCookie(res);
     send403(res);
   }
-  const user = await findById(userId);
-  const userWithoutPassword = erasePasswordInformation(user?.toObject());
-  res.status(200);
-  res.send(userWithoutPassword);
 }
 
 export default verifyMiddlware;

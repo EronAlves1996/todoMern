@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<185a8ec99a384ad2fe7013e304bb061c>>
+ * @generated SignedSource<<0136481cf47202cac46ce922bd44dad0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,23 +8,19 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest, Mutation } from 'relay-runtime';
-export type UserInput = {
+import { ConcreteRequest, Query } from 'relay-runtime';
+export type IndexQuery$variables = {
   email: string;
-  name: string;
   password: string;
 };
-export type RegistrarMutation$variables = {
-  user?: UserInput | null;
-};
-export type RegistrarMutation$data = {
-  readonly createUser: {
+export type IndexQuery$data = {
+  readonly login: {
     readonly _id: string;
   } | null;
 };
-export type RegistrarMutation = {
-  response: RegistrarMutation$data;
-  variables: RegistrarMutation$variables;
+export type IndexQuery = {
+  response: IndexQuery$data;
+  variables: IndexQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -32,7 +28,12 @@ var v0 = [
   {
     "defaultValue": null,
     "kind": "LocalArgument",
-    "name": "user"
+    "name": "email"
+  },
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "password"
   }
 ],
 v1 = [
@@ -41,13 +42,18 @@ v1 = [
     "args": [
       {
         "kind": "Variable",
-        "name": "user",
-        "variableName": "user"
+        "name": "email",
+        "variableName": "email"
+      },
+      {
+        "kind": "Variable",
+        "name": "password",
+        "variableName": "password"
       }
     ],
     "concreteType": "UserOutput",
     "kind": "LinkedField",
-    "name": "createUser",
+    "name": "login",
     "plural": false,
     "selections": [
       {
@@ -66,29 +72,29 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "RegistrarMutation",
+    "name": "IndexQuery",
     "selections": (v1/*: any*/),
-    "type": "Mutation",
+    "type": "Query",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "RegistrarMutation",
+    "name": "IndexQuery",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "c8bd662cfa9848a8d232c478a5116869",
+    "cacheID": "7111a2491b55c7ac59c12e2255aa5fe6",
     "id": null,
     "metadata": {},
-    "name": "RegistrarMutation",
-    "operationKind": "mutation",
-    "text": "mutation RegistrarMutation(\n  $user: UserInput\n) {\n  createUser(user: $user) {\n    _id\n  }\n}\n"
+    "name": "IndexQuery",
+    "operationKind": "query",
+    "text": "query IndexQuery(\n  $email: String!\n  $password: String!\n) {\n  login(email: $email, password: $password) {\n    _id\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "52e8c1afe263e41348dffb46c9d0e5bc";
+(node as any).hash = "6852a29d89b147e5fb79cfbb6afee5ab";
 
 export default node;

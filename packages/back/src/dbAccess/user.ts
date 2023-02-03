@@ -31,7 +31,7 @@ async function createUser({
   email: string;
 }) {
   const document = new userModel({
-    _id: mongoose.Types.ObjectId,
+    _id: new mongoose.Types.ObjectId(),
     name,
     password,
     email,

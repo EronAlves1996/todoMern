@@ -5,8 +5,6 @@ import {
   GraphQLObjectType,
   GraphQLString,
 } from "graphql";
-import { sha256 } from "js-sha256";
-import mongoose from "mongoose";
 import hashString from "../utils/hash";
 
 export const userInput = new GraphQLInputObjectType({
@@ -81,7 +79,7 @@ export const createUser: GraphQLFieldConfig<any, any, any> = {
     }
   ) => {
     const hashedPassword = hashString(password);
-    const userSaved = createUser({
+    const userSaved = await createUser({
       email,
       password: hashedPassword,
       name,

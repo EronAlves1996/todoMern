@@ -1,20 +1,33 @@
-schema {
-  query: Query
-  mutation: mutation
-}
-
 """Exposes a URL that specifies the behavior of this scalar."""
 directive @specifiedBy(
   """The URL that specifies the behavior of this scalar."""
   url: String!
 ) on SCALAR
 
-type mutation {
+scalar Date
+
+type Mutation {
   createUser(user: UserInput): UserOutput
+  createTask(deadline: Date!, description: String!): taskOutput
 }
 
 type Query {
-  getTest: String
+  login(email: String!, password: String!): UserOutput
+}
+
+input taskInput {
+  description: String!
+  creationDate: Date!
+  deadline: Date!
+  isCompleted: Boolean!
+}
+
+type taskOutput {
+  _id: String
+  description: String!
+  creationDate: Date!
+  deadline: Date!
+  isCompleted: Boolean!
 }
 
 input UserInput {

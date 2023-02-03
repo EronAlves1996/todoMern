@@ -5,8 +5,9 @@ import configuration from "../config";
 import { send403 } from "./utils";
 import { erasePasswordInformation } from "../utils/userUtils";
 import userDbAccess from "../dbAccess/user";
+import hashString from "../utils/hash";
 
-const WEEK = 60 * 60 * 24 * 7;
+const WEEK = 1000 * 60 * 60 * 24 * 7;
 
 const { findUserByEmailAndPassword } = userDbAccess;
 
@@ -24,7 +25,7 @@ const loginMiddleware = async (req: Request, res: Response) => {
   }
 
   const [email, password] = unencodeCredentials(authorization!);
-  const hashedPassword = sha256(password);
+  const hashedPassword = hashString(password);
 
   const findedUser = await findUserByEmailAndPassword(email, hashedPassword);
 

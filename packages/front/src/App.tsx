@@ -1,5 +1,10 @@
 import { Suspense, useEffect, useState } from "react";
-import { NavigateFunction, Outlet, useNavigate } from "react-router-dom";
+import {
+  NavigateFunction,
+  Outlet,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 
 const TO_HOME = "/";
 const UNLOGGED_MESSAGE = { msg: "Por favor, faça o login" };
@@ -18,13 +23,16 @@ export type userOutletContext = {
 const useVerifyUserLogin = (
   { user, setUser }: userOutletContext,
   navigate: NavigateFunction
-) =>
+) => {
+  const location = useLocation();
   useEffect(() => {
     if (user == null)
-      verifyAnd(setUser).catch((_) =>
-        navigate(TO_HOME, { state: UNLOGGED_MESSAGE })
-      );
+      verifyAnd(setUser).catch((_) => {
+        if (location.pathname != "/")
+          navigate(TO_HOME, { state: UNLOGGED_MESSAGE });
+      });
   }, []);
+};
 
 function verifyAnd(setUser: React.Dispatch<React.SetStateAction<User | null>>) {
   return tryVerifyLogin().then(setUser);

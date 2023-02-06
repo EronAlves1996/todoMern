@@ -2,17 +2,14 @@ import { config } from "dotenv";
 
 const args = process.argv;
 
-const environmentFlagPosition = args.findIndex((arg) => arg === "--env");
-const ENVIRONMENT_VALUE_POSITION = environmentFlagPosition + 1;
+const environmentTestDefiner = args.findIndex((arg) => arg.endsWith("jest.js"));
 
-const environment =
-  environmentFlagPosition !== -1 ? args[ENVIRONMENT_VALUE_POSITION] : "dev";
+const environment = environmentTestDefiner !== -1 ? "test" : "dev";
 
 const envConfigPath = {
-  prod: ".env",
   test: ".env.test",
   dev: ".env.dev",
-} as const;
+};
 
 type KeyOfEnvConfig = keyof typeof envConfigPath;
 

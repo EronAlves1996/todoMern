@@ -25,6 +25,17 @@ function registerTestUser(testBed: supertest.SuperTest<supertest.Test>) {
   });
 }
 
+function makeLoginAsTestUser(testBed: supertest.SuperTest<supertest.Test>) {
+  const credentials = "test@test:1234";
+  const base64Credentials = Buffer.from(credentials);
+  return testBed
+    .post("/login")
+    .set(
+      "authorization",
+      "Basic ".concat(base64Credentials.toString("base64"))
+    );
+}
+
 describe("user features", () => {
   const testBed = supertest(app);
 
@@ -47,20 +58,31 @@ describe("user features", () => {
 
   test("Make a login as a user that gonna be registered", async () => {
     await registerTestUser(testBed);
-    const credentials = "test@test:1234";
-    const base64Credentials = Buffer.from(credentials);
-    await testBed
-      .post("/login")
-      .set(
-        "authorization",
-        "Basic ".concat(base64Credentials.toString("base64"))
-      )
+    await makeLoginAsTestUser(testBed)
       .expect(200)
       .then((response) => {
         expect(response.headers["set-cookie"]).toBeTruthy();
         const [cookie]: string[] = response.headers["set-cookie"];
 
         expect(cookie.startsWith("jwt-login-test")).toBeTruthy();
+      });
+  });
+
+  test("Verify if a cookie will be correctly detected", async () => {
+    await registerTestUser(testBed);
+    const response = await makeLoginAsTestUser(testBed);
+    const [cookie]: string[] = response.headers["set-cookie"];
+    const jwtToken = cookie.split(";")[0];
+
+    await testBed
+      .get("/verify")
+      .set("cookie", jwtToken)
+      .expect(200)
+      .then((response) => {
+        const { _id, name, email } = response.body;
+        expect(_id).toBeTruthy();
+        expect(name).toBe("Test user");
+        expect(email).toBe("test@test");
       });
   });
 

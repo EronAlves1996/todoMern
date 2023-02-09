@@ -7,6 +7,7 @@ import {
   GraphQLScalarType,
   GraphQLString,
 } from "graphql";
+import { ensureIdentification } from "../utils/ensureIdentification";
 
 export const dateType = new GraphQLScalarType(Date);
 

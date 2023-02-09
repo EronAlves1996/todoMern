@@ -137,7 +137,7 @@ describe("overall integration test", () => {
       console.log(response.body);
       const { _id, creationDate, isCompleted } = response.body.data.createTask;
 
-      const creationDateCasted: Date = creationDate;
+      const creationDateCasted = new Date(creationDate);
       const year = creationDateCasted.getFullYear();
       const day = creationDateCasted.getDate();
       const month = creationDateCasted.getMonth();

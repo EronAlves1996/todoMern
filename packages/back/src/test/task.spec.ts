@@ -39,6 +39,7 @@ describe("test task", () => {
   it("should create a task", async () => {
     const jwtLogin = sign(id, configuration.JWT_SECRET);
     const response = await postToGraphQl(testBed)
+      .set("Cookie", `${configuration.COOKIE_NAME}=${jwtLogin}`)
       .send({
         query: `
         mutation createTask($deadline: Date!, $description: String!){

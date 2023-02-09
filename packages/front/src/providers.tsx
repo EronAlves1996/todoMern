@@ -1,14 +1,11 @@
-import React, { PropsWithChildren, PropsWithoutRef } from "react";
+import { PropsWithChildren, StrictMode } from "react";
 import { RelayEnvironmentProvider } from "react-relay";
-import { RouterProvider } from "react-router-dom";
 import { RelayEnvironment } from "./RelayEnvironment";
 
-function Providers({ router }: any) {
+function Providers({ children }: PropsWithChildren) {
   return (
     <RelayEnvironmentProvider environment={RelayEnvironment}>
-      <React.StrictMode>
-        <RouterProvider {...{ router }} />
-      </React.StrictMode>
+      <StrictMode>{children}</StrictMode>
     </RelayEnvironmentProvider>
   );
 }

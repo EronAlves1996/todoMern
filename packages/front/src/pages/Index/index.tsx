@@ -1,4 +1,4 @@
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler } from "react-hook-form";
 import {
   Link,
   useLocation,
@@ -6,23 +6,15 @@ import {
   useOutletContext,
 } from "react-router-dom";
 import { userOutletContext } from "../../App";
-import { LabeledInput } from "../../shared/LabeledInput";
+import LoginForm from "./LoginForm";
 
 function Index() {
-  const {
-    register,
-    handleSubmit,
-    formState: { isValid },
-  } = useForm();
   const location = useLocation();
-  const { user, setUser } = useOutletContext<userOutletContext>();
+  const outletContext = useOutletContext<userOutletContext>();
   const navigate = useNavigate();
-  if (user !== null) {
+  if (outletContext.user !== null) {
     navigate("/home");
   }
-
-  const locationStateMsg = location.state?.msg;
-
   const login: SubmitHandler<FieldValues> = (data) => {
     const { email, password } = data;
     const encodedLoginData = btoa(email.concat(":", password));
@@ -41,33 +33,19 @@ function Index() {
       })
       .then((json) => {
         navigate("/home");
-        setUser(json);
+        outletContext.setUser(json);
       })
       .catch((err) => {
         navigate("/", { state: { msg: err.msg } });
       });
   };
 
+  const locationStateMsg = location.state?.msg;
+
   return (
     <>
       {locationStateMsg && <p>{locationStateMsg}</p>}
-      <form onSubmit={handleSubmit(login)}>
-        <LabeledInput
-          label="E-mail"
-          name="email"
-          type="email"
-          {...{ register }}
-        />
-        <LabeledInput
-          label="Senha"
-          name="password"
-          type="password"
-          {...{ register }}
-        />
-        <button type="submit" disabled={!isValid}>
-          Login
-        </button>
-      </form>
+      <LoginForm login={login} />
       <div>
         <a href="">Esqueceu sua senha?</a>
       </div>

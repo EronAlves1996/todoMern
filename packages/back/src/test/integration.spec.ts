@@ -134,7 +134,6 @@ describe("overall integration test", () => {
           },
         })
         .expect(200);
-      console.log(response.body);
       const { _id, creationDate, isCompleted } = response.body.data.createTask;
 
       const creationDateCasted = new Date(creationDate);

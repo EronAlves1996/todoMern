@@ -9,7 +9,7 @@ export function LabeledInput({
   return (
     <div>
       <label htmlFor={name}>{label}</label>
-      <input {...{ type, ...register(name, { required: true }) }} />
+      <input {...{ type, ...register(name, { required: true }) }} id={name} />
     </div>
   );
 }

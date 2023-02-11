@@ -17,7 +17,7 @@ describe("register form", () => {
     const nameForm = screen.findByLabelText("Nome");
     const emailForm = screen.findByLabelText("E-mail");
     const passwordForm = screen.findByLabelText("Senha");
-    const repeatPasswordForm = screen.findByLabelText("Repita sua senha");
+    const repeatPasswordForm = screen.findByLabelText("Repita sua Senha");
     const form = screen.findByRole("form");
   });
 });

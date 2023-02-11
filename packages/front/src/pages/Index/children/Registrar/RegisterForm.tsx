@@ -20,7 +20,7 @@ export function RegisterForm({
     return equals;
   };
   return (
-    <form onSubmit={handleSubmit(submitter)}>
+    <form onSubmit={handleSubmit(submitter)} role="form">
       <LabeledInput label="Nome" type="text" name="name" {...{ register }} />
       <LabeledInput
         label="E-mail"

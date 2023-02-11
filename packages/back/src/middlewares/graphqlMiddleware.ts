@@ -35,7 +35,9 @@ const graphqlMiddleware = createHandler({
     try {
       const headers = req.headers as any;
       const cookie: string | null = headers["cookie"];
-      const encodedJwt = cookie?.split("=")[1];
+      const [cookieName, encodedJwt] = cookie?.split("=") as string[];
+      if (cookieName != configuration.COOKIE_NAME)
+        throw new Error("Invalid cookie");
       const userId = verify(encodedJwt!, configuration.JWT_SECRET).toString();
       if (await userDbAccess.userExistsById(userId)) {
         returnObject["userId"] = userId;

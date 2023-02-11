@@ -1,6 +1,7 @@
 import { describe, it } from "@jest/globals";
+import { act } from "react-dom/test-utils";
 import { FieldValues, SubmitHandler } from "react-hook-form";
-import { render } from "../../../../utils/test-utils";
+import { render, screen } from "../../../../utils/test-utils";
 import { RegisterForm } from "./RegisterForm";
 
 describe("register form", () => {
@@ -12,5 +13,11 @@ describe("register form", () => {
     };
 
     render(<RegisterForm submitter={submitterMock} />);
+
+    const nameForm = screen.findByLabelText("Nome");
+    const emailForm = screen.findByLabelText("E-mail");
+    const passwordForm = screen.findByLabelText("Senha");
+    const repeatPasswordForm = screen.findByLabelText("Repita sua senha");
+    const form = screen.findByRole("form");
   });
 });

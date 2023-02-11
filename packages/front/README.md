@@ -19,3 +19,9 @@ The pages that exist by this time are the following:
 - `/` - A default login page
 - `/register`- A page for registering yourself as a user
 - `/home` - A homepage where you can create a task. More functionality will be added
+
+## Running tests
+
+```sh
+$ pnpm test
+```

@@ -1,4 +1,4 @@
-import { describe, it } from "@jest/globals";
+import { describe, expect, it } from "@jest/globals";
 import { act } from "react-dom/test-utils";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { fireEvent, render, screen } from "../../../../utils/test-utils";
@@ -6,7 +6,7 @@ import { RegisterForm } from "./RegisterForm";
 
 describe("register form", () => {
   it("should register and send data", async () => {
-    let dataSubmitted;
+    let dataSubmitted: any;
 
     const submitterMock: SubmitHandler<FieldValues> = (data) => {
       dataSubmitted = data;
@@ -27,6 +27,12 @@ describe("register form", () => {
       await typeIn(repeatPasswordForm, "1234");
       await fireEvent.submit(form);
     });
+
+    const { name, email, password, confirmedPassword } = dataSubmitted;
+    expect(name).toBe("Test user");
+    expect(email).toBe("test@test");
+    expect(password).toBe("1234");
+    expect(confirmedPassword).toBe("1234");
   });
 });
 

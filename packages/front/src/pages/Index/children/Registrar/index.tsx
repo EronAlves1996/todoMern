@@ -5,6 +5,7 @@ import { NavigateFunction, useNavigate } from "react-router-dom";
 import { Disposable, MutationParameters, PayloadError } from "relay-runtime";
 import { LabeledInput } from "../../../../shared/LabeledInput";
 import { NewPasswordForm } from "./components";
+import { RegisterForm } from "./RegisterForm";
 
 const registrar = graphql`
   mutation RegistrarMutation($user: UserInput) {
@@ -38,41 +39,13 @@ const useIndexFormHandleSubmition = (
 };
 
 export default function Registrar() {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { isValid },
-  } = useForm();
   const navigate = useNavigate();
-  const [passwordsAreEquals, setPasswordsAsEquals] = useState(false);
   const [commit, isInFlight] = useMutation(registrar);
   const submitter = useIndexFormHandleSubmition(commit, navigate);
-
-  const checkPasswordsAsEquals = (equals: boolean) => {
-    setPasswordsAsEquals(equals);
-    return equals;
-  };
 
   const submit: SubmitHandler<FieldValues> = (data) => {
     submitter(data);
   };
 
-  return (
-    <form onSubmit={handleSubmit(submit)}>
-      <LabeledInput label="Nome" type="text" name="name" {...{ register }} />
-      <LabeledInput
-        label="E-mail"
-        type="email"
-        name="email"
-        {...{ register }}
-      />
-      <NewPasswordForm
-        {...{ register, watch, passwordsAreEquals: checkPasswordsAsEquals }}
-      />
-      <button type="submit" disabled={!isValid || !passwordsAreEquals}>
-        Cadastrar
-      </button>
-    </form>
-  );
+  return <RegisterForm submitter={submit} />;
 }

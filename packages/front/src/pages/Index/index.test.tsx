@@ -37,6 +37,7 @@ describe("initial page", () => {
       });
       await fireEvent.submit(form);
     });
+
     const { email, password } = testedData;
     expect(email).toBe("test@test");
     expect(password).toBe("1234");

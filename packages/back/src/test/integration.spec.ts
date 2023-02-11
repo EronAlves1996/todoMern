@@ -69,7 +69,7 @@ describe("overall integration test", () => {
           expect(response.headers["set-cookie"]).toBeTruthy();
           const [cookie]: string[] = response.headers["set-cookie"];
 
-          expect(cookie.startsWith("jwt-login-test")).toBeTruthy();
+          expect(cookie.startsWith(configuration.COOKIE_NAME)).toBeTruthy();
         });
     });
 

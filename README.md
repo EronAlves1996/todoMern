@@ -65,10 +65,12 @@ type UserOutput {
 
 ## Running application locally
 
+For running this project, `pnpm` is required.
+
 ```sh
 $ docker run -p 27017:27017 -d mongo
 $ pnpm install
 $ pnpm start
 ```
 
-The `start`script will run the application end-to-end. Point your web browser to `http://localhost:3000` to access it. Make calls to the API on `http://localhost:3001`. Please refer to the documentation of each package for details of application.
+The `start` script will run the application end-to-end. Point your web browser to `http://localhost:3000` to access it. Make calls to the API on `http://localhost:3001`. Please refer to the documentation of each package for details of application.

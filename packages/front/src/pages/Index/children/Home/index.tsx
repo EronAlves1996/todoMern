@@ -1,8 +1,8 @@
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler } from "react-hook-form";
 import { graphql, useMutation } from "react-relay";
 import { useOutletContext } from "react-router-dom";
 import { userOutletContext } from "../../../../App";
-import { LabeledInput } from "../../../../shared/LabeledInput";
+import { NewTaskForm } from "./NewTaskForm";
 
 const newTask = graphql`
   mutation HomeMutation($description: String!, $deadline: Date!) {
@@ -31,34 +31,6 @@ export default function Home() {
     <>
       <button type="button">Nova Tarefa</button>
       <NewTaskForm submitter={submit} />
-    </>
-  );
-}
-
-export function NewTaskForm({
-  submitter,
-}: {
-  submitter: SubmitHandler<FieldValues>;
-}) {
-  const { register, handleSubmit } = useForm();
-
-  return (
-    <>
-      <form onSubmit={handleSubmit(submitter)}>
-        <LabeledInput
-          label="Descrição"
-          name="description"
-          type="text"
-          register={register}
-        />
-        <LabeledInput
-          label="Data de Conclusão"
-          name="deadline"
-          type="date"
-          register={register}
-        />
-        <button type="submit">Salvar tarefa</button>
-      </form>
     </>
   );
 }

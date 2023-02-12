@@ -45,7 +45,7 @@ describe("overall integration test", () => {
   const testBed = supertest(app);
   beforeAll(async () => {
     await mongoose.connect(configuration.DB_URL);
-    console.log("connected to database at 27016");
+    console.log("connected to database at " + configuration.DB_URL);
   });
 
   describe("user features", () => {

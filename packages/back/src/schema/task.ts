@@ -4,12 +4,24 @@ import {
   GraphQLInputObjectType,
   GraphQLNonNull,
   GraphQLObjectType,
-  GraphQLScalarType,
   GraphQLString,
 } from "graphql";
+import { Schema } from "mongoose";
 import { ensureIdentification } from "../utils/ensureIdentification";
+import { dateType } from "./date";
+import Ischema from "./schemaType";
 
-export const dateType = new GraphQLScalarType(Date);
+const taskMongooseSchema = new Schema({
+  _id: Schema.Types.ObjectId,
+  description: Schema.Types.String,
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+  },
+  creationDate: Schema.Types.Date,
+  deadline: Schema.Types.Date,
+  isCompleted: Schema.Types.Boolean,
+});
 
 const task = {
   description: { type: new GraphQLNonNull(GraphQLString) },
@@ -19,7 +31,7 @@ const task = {
 };
 
 export const taskOutput = new GraphQLObjectType({
-  name: "taskOutput",
+  name: "TaskOutput",
   fields: {
     _id: { type: GraphQLString },
     ...task,
@@ -27,7 +39,7 @@ export const taskOutput = new GraphQLObjectType({
 });
 
 export const taskInput = new GraphQLInputObjectType({
-  name: "taskInput",
+  name: "TaskInput",
   fields: {
     ...task,
   },
@@ -44,13 +56,30 @@ export const createTask: GraphQLFieldConfig<any, any, any> = {
     { deadline, description },
     {
       loaders: {
-        taskDbAccess: { createTask },
+        task: { create },
       },
       userId,
     }
   ) =>
     ensureIdentification(userId, async () => {
-      const createdTask = await createTask({ deadline, description, userId });
+      const createdTask = await create({
+        deadline,
+        description,
+        userId,
+        creationDate: new Date(),
+        isCompleted: false,
+      });
       return createdTask;
     }),
 };
+
+const taskSchema: Ischema = {
+  types: [taskOutput, taskInput],
+  mutations: { createTask },
+  mongooseSchema: {
+    name: "task",
+    schema: taskMongooseSchema,
+  },
+};
+
+export default taskSchema;

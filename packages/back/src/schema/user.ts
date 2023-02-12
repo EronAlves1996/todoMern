@@ -5,7 +5,16 @@ import {
   GraphQLObjectType,
   GraphQLString,
 } from "graphql";
+import { Schema } from "mongoose";
 import hashString from "../utils/hash";
+import Ischema from "./schemaType";
+
+export const userMongooseSchema = new Schema({
+  _id: Schema.Types.ObjectId,
+  email: Schema.Types.String,
+  password: Schema.Types.String,
+  name: Schema.Types.String,
+});
 
 export const userInput = new GraphQLInputObjectType({
   name: "UserInput",
@@ -52,13 +61,13 @@ export const login: GraphQLFieldConfig<any, any, any> = {
     { email, password },
     {
       loaders: {
-        userDbAccess: { findUserByEmailAndPassword },
+        user: { findOneBy },
       },
     }
   ) => {
     const hashedPassword = hashString(password);
-    const userFinded = await findUserByEmailAndPassword(email, hashedPassword);
-    return userFinded?.toObject();
+    const userFinded = await findOneBy({ email, password: hashedPassword });
+    return userFinded;
   },
 };
 
@@ -74,16 +83,28 @@ export const createUser: GraphQLFieldConfig<any, any, any> = {
     { user: { email, password, name } },
     {
       loaders: {
-        userDbAccess: { createUser },
+        user: { create },
       },
     }
   ) => {
     const hashedPassword = hashString(password);
-    const userSaved = await createUser({
+    const userSaved = await create({
       email,
       password: hashedPassword,
       name,
     });
-    return userSaved.toObject();
+    return userSaved;
   },
 };
+
+const userSchema: Ischema = {
+  types: [userInput, userOutput],
+  mutations: { createUser },
+  queries: { login },
+  mongooseSchema: {
+    name: "user",
+    schema: userMongooseSchema,
+  },
+};
+
+export default userSchema;

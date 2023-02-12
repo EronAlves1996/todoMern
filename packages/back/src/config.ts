@@ -1,8 +1,7 @@
 import { config } from "dotenv";
 
 const args = process.argv;
-
-const environmentTestDefiner = args.findIndex((arg) => arg.endsWith("jest.js"));
+const environmentTestDefiner = args.findIndex((arg) => arg.includes("jest"));
 
 const environment = environmentTestDefiner !== -1 ? "test" : "dev";
 

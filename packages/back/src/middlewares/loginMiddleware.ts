@@ -1,15 +1,14 @@
 import { Request, Response } from "express";
-import { sha256 } from "js-sha256";
 import * as jwt from "jsonwebtoken";
 import configuration from "../config";
-import { send403 } from "./utils";
-import { erasePasswordInformation } from "../utils/userUtils";
-import userDbAccess from "../dbAccess/user";
 import hashString from "../utils/hash";
+import { erasePasswordInformation } from "../utils/userUtils";
+import { loaders } from "./graphqlMiddleware";
+import { send403 } from "./utils";
 
 const WEEK = 1000 * 60 * 60 * 24 * 7;
 
-const { findUserByEmailAndPassword } = userDbAccess;
+const { findOneBy } = loaders.user;
 
 function unencodeCredentials(authorization: string) {
   const encodedCredentials = authorization?.split(" ")[1];
@@ -27,13 +26,13 @@ const loginMiddleware = async (req: Request, res: Response) => {
   const [email, password] = unencodeCredentials(authorization!);
   const hashedPassword = hashString(password);
 
-  const findedUser = await findUserByEmailAndPassword(email, hashedPassword);
+  const findedUser = await findOneBy({ email, password: hashedPassword });
 
   if (findedUser == null) {
     send403(res);
   }
 
-  const userAsObject = erasePasswordInformation(findedUser?.toObject());
+  const userAsObject = erasePasswordInformation(findedUser);
 
   res.cookie(
     configuration.COOKIE_NAME,

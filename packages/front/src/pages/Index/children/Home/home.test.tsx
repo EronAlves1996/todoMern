@@ -1,13 +1,13 @@
 import { describe, expect, it } from "@jest/globals";
 import { act } from "react-dom/test-utils";
 import { FieldValues, SubmitHandler } from "react-hook-form";
-import { NewTaskForm } from ".";
 import {
   fireEvent,
   render,
   screen,
   typeInto,
 } from "../../../../utils/test-utils";
+import { NewTaskForm } from "./NewTaskForm";
 
 describe("home page test", () => {
   it("should create a task and submit correctly", async () => {
@@ -19,7 +19,6 @@ describe("home page test", () => {
 
     render(<NewTaskForm submitter={submitterMock} />);
 
-    const testedDate = new Date().toDateString();
     const [descriptionInput, deadlineInput, form] = await Promise.all([
       screen.findByLabelText("Descrição"),
       screen.findByLabelText("Data de Conclusão"),
@@ -29,7 +28,7 @@ describe("home page test", () => {
     await act(async () => {
       await Promise.all([
         typeInto(descriptionInput, "Test description"),
-        typeInto(deadlineInput, testedDate),
+        typeInto(deadlineInput, "2022-10-01"),
       ]);
 
       await fireEvent.submit(form);
@@ -37,6 +36,6 @@ describe("home page test", () => {
 
     const { description, deadline } = testedData;
     expect(description).toBe("Test description");
-    expect(deadline).toBe(testedData);
+    expect(deadline).toBe("2022-10-01");
   });
 });

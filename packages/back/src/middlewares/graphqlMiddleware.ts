@@ -9,7 +9,6 @@ import { createHandler } from "graphql-http/lib/use/express";
 import { verify } from "jsonwebtoken";
 import { model, Model, Types } from "mongoose";
 import configuration from "../config";
-import userDbAccess from "../dbAccess/user";
 import dateSchema from "../schema/date";
 import Ischema, { mongooseSchemaDef } from "../schema/schemaType";
 import taskSchema from "../schema/task";
@@ -76,7 +75,7 @@ function mountContext(...mongooseSchemas: mongooseSchemaDef[]) {
       if (cookieName != configuration.COOKIE_NAME)
         throw new Error("Invalid cookie");
       const userId = verify(encodedJwt!, configuration.JWT_SECRET).toString();
-      if (await userDbAccess.userExistsById(userId)) {
+      if (await returnObject.loaders.user.findOneBy({ _id: userId })) {
         returnObject["userId"] = userId;
       }
     } catch (err) {

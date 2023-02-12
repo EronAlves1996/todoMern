@@ -6,10 +6,10 @@ import {
 import { Schema } from "mongoose";
 
 interface schema {
-  types: Array<GraphQLInputType | GraphQLOutputType>;
-  queries: GraphQLFieldConfig<any, any, any>;
-  mutations: GraphQLFieldConfig<any, any, any>;
-  mongooseSchema: Schema;
+  types?: Array<GraphQLInputType | GraphQLOutputType>;
+  queries?: Array<GraphQLFieldConfig<any, any, any>>;
+  mutations?: Array<GraphQLFieldConfig<any, any, any>>;
+  mongooseSchema?: { name: string; schema: Schema };
 }
 
 export default schema;

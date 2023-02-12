@@ -25,7 +25,7 @@ function createLoaders(mongooseSchemas: mongooseSchemaDef[]) {
       },
       create: async (entity: any) => {
         const _id = new Types.ObjectId();
-        const createdDoc = new Model({ ...entity, _id });
+        const createdDoc = new model({ ...entity, _id });
         const docSaved = await createdDoc.save();
         return docSaved.toObject();
       },

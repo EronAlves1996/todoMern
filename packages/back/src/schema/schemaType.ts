@@ -5,8 +5,8 @@ export type mongooseSchemaDef = { name: string; schema: Schema };
 
 interface Ischema {
   types?: GraphQLNamedType[];
-  queries?: Array<GraphQLFieldConfig<any, any, any>>;
-  mutations?: Array<GraphQLFieldConfig<any, any, any>>;
+  queries?: { [queryName: string]: GraphQLFieldConfig<any, any, any> };
+  mutations?: { [mutationName: string]: GraphQLFieldConfig<any, any, any> };
   mongooseSchema?: mongooseSchemaDef;
 }
 

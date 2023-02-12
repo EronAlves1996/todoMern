@@ -31,7 +31,7 @@ const task = {
 };
 
 export const taskOutput = new GraphQLObjectType({
-  name: "taskOutput",
+  name: "TaskOutput",
   fields: {
     _id: { type: GraphQLString },
     ...task,
@@ -39,7 +39,7 @@ export const taskOutput = new GraphQLObjectType({
 });
 
 export const taskInput = new GraphQLInputObjectType({
-  name: "taskInput",
+  name: "TaskInput",
   fields: {
     ...task,
   },
@@ -69,7 +69,7 @@ export const createTask: GraphQLFieldConfig<any, any, any> = {
 
 const taskSchema: Ischema = {
   types: [taskOutput, taskInput],
-  mutations: [createTask],
+  mutations: { createTask },
   mongooseSchema: {
     name: "task",
     schema: taskMongooseSchema,

@@ -99,8 +99,8 @@ export const createUser: GraphQLFieldConfig<any, any, any> = {
 
 const userSchema: Ischema = {
   types: [userInput, userOutput],
-  mutations: [createUser],
-  queries: [login],
+  mutations: { createUser },
+  queries: { login },
   mongooseSchema: {
     name: "user",
     schema: userMongooseSchema,

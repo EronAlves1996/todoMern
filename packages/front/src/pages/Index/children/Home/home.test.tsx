@@ -1,4 +1,5 @@
 import { describe, expect, it } from "@jest/globals";
+import { act } from "react-dom/test-utils";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { NewTaskForm } from ".";
 import {
@@ -33,5 +34,9 @@ describe("home page test", () => {
 
       await fireEvent.submit(form);
     });
+
+    const { description, deadline } = testedData;
+    expect(description).toBe("Test description");
+    expect(deadline).toBe(testedData);
   });
 });

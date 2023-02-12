@@ -23,7 +23,7 @@ async function verifyMiddlware(
       throw new Error("Invalid cookie/user");
     }
     const user = await findOneBy({ _id: userId });
-    const userWithoutPassword = erasePasswordInformation(user?.toObject());
+    const userWithoutPassword = erasePasswordInformation(user);
     res.status(200);
     res.send(userWithoutPassword);
   } catch (err) {

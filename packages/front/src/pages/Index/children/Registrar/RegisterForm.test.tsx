@@ -1,7 +1,12 @@
 import { describe, expect, it } from "@jest/globals";
 import { act } from "react-dom/test-utils";
 import { FieldValues, SubmitHandler } from "react-hook-form";
-import { fireEvent, render, screen } from "../../../../utils/test-utils";
+import {
+  fireEvent,
+  render,
+  screen,
+  typeInto,
+} from "../../../../utils/test-utils";
 import { RegisterForm } from "./RegisterForm";
 
 describe("register form", () => {
@@ -21,10 +26,10 @@ describe("register form", () => {
     const form = await screen.findByRole("form");
 
     await act(async () => {
-      await typeIn(nameForm, "Test user");
-      await typeIn(emailForm, "test@test");
-      await typeIn(passwordForm, "1234");
-      await typeIn(repeatPasswordForm, "1234");
+      await typeInto(nameForm, "Test user");
+      await typeInto(emailForm, "test@test");
+      await typeInto(passwordForm, "1234");
+      await typeInto(repeatPasswordForm, "1234");
       await fireEvent.submit(form);
     });
 
@@ -35,11 +40,3 @@ describe("register form", () => {
     expect(confirmedPassword).toBe("1234");
   });
 });
-
-async function typeIn(element: HTMLElement, value: string) {
-  await fireEvent.change(element, {
-    target: {
-      value,
-    },
-  });
-}

@@ -1,8 +1,8 @@
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler } from "react-hook-form";
 import { graphql, useMutation } from "react-relay";
 import { useOutletContext } from "react-router-dom";
 import { userOutletContext } from "../../../../App";
-import { LabeledInput } from "../../../../shared/LabeledInput";
+import { NewTaskForm } from "./NewTaskForm";
 
 const newTask = graphql`
   mutation HomeMutation($description: String!, $deadline: Date!) {
@@ -18,17 +18,6 @@ const newTask = graphql`
 
 export default function Home() {
   const { user } = useOutletContext<userOutletContext>();
-
-  return (
-    <>
-      <button type="button">Nova Tarefa</button>
-      <NewTaskForm />
-    </>
-  );
-}
-
-function NewTaskForm() {
-  const { register, handleSubmit } = useForm();
   const [commit, isInFlight] = useMutation(newTask);
 
   const submit: SubmitHandler<FieldValues> = (data) => {
@@ -37,23 +26,11 @@ function NewTaskForm() {
     commit({ variables, onCompleted: (r) => console.log(r) });
   };
 
+  //todo: make the NewTaskForm appear only when the button with value "Nova Tarefa" is clicked
   return (
     <>
-      <form onSubmit={handleSubmit(submit)}>
-        <LabeledInput
-          label="Descrição"
-          name="description"
-          type="text"
-          {...{ register }}
-        />
-        <LabeledInput
-          label="Data de Conclusão"
-          name="deadline"
-          type="date"
-          register={register}
-        />
-        <button type="submit">Salvar tarefa</button>
-      </form>
+      <button type="button">Nova Tarefa</button>
+      <NewTaskForm submitter={submit} />
     </>
   );
 }

@@ -32,7 +32,7 @@ const loginMiddleware = async (req: Request, res: Response) => {
     send403(res);
   }
 
-  const userAsObject = erasePasswordInformation(findedUser?.toObject());
+  const userAsObject = erasePasswordInformation(findedUser);
 
   res.cookie(
     configuration.COOKIE_NAME,

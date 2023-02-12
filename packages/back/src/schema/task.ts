@@ -62,7 +62,13 @@ export const createTask: GraphQLFieldConfig<any, any, any> = {
     }
   ) =>
     ensureIdentification(userId, async () => {
-      const createdTask = await create({ deadline, description, userId });
+      const createdTask = await create({
+        deadline,
+        description,
+        userId,
+        creationDate: new Date(),
+        isCompleted: false,
+      });
       return createdTask;
     }),
 };

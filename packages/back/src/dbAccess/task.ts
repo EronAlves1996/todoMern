@@ -6,18 +6,6 @@ type Task = {
   userId: string;
 };
 
-const taskSchema = new Schema({
-  _id: Schema.Types.ObjectId,
-  description: Schema.Types.String,
-  userId: {
-    type: Schema.Types.ObjectId,
-    ref: "user",
-  },
-  creationDate: Schema.Types.Date,
-  deadline: Schema.Types.Date,
-  isCompleted: Schema.Types.Boolean,
-});
-
 const taskModel = model("task", taskSchema);
 
 async function createTask(partialTaskObj: Task) {

@@ -1,12 +1,5 @@
 import mongoose, { model, Schema } from "mongoose";
 
-const userSchema = new Schema({
-  _id: Schema.Types.ObjectId,
-  email: Schema.Types.String,
-  password: Schema.Types.String,
-  name: Schema.Types.String,
-});
-
 const userModel = model("user", userSchema);
 
 async function findUserByEmailAndPassword(email: string, password: string) {

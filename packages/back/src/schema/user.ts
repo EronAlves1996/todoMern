@@ -5,7 +5,16 @@ import {
   GraphQLObjectType,
   GraphQLString,
 } from "graphql";
+import { Schema } from "mongoose";
 import hashString from "../utils/hash";
+import schema from "./schemaType";
+
+const userMongooseSchema = new Schema({
+  _id: Schema.Types.ObjectId,
+  email: Schema.Types.String,
+  password: Schema.Types.String,
+  name: Schema.Types.String,
+});
 
 export const userInput = new GraphQLInputObjectType({
   name: "UserInput",
@@ -87,3 +96,15 @@ export const createUser: GraphQLFieldConfig<any, any, any> = {
     return userSaved.toObject();
   },
 };
+
+const userSchema: schema = {
+  types: [userInput, userOutput],
+  mutations: [createUser],
+  queries: [login],
+  mongooseSchema: {
+    name: "user",
+    schema: userMongooseSchema,
+  },
+};
+
+export default userSchema;

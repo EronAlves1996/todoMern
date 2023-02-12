@@ -9,7 +9,7 @@ import {
 import { Schema } from "mongoose";
 import { ensureIdentification } from "../utils/ensureIdentification";
 import { dateType } from "./date";
-import schema from "./schemaType";
+import Ischema from "./schemaType";
 
 const taskMongooseSchema = new Schema({
   _id: Schema.Types.ObjectId,
@@ -67,7 +67,7 @@ export const createTask: GraphQLFieldConfig<any, any, any> = {
     }),
 };
 
-const taskSchema: schema = {
+const taskSchema: Ischema = {
   types: [taskOutput, taskInput],
   mutations: [createTask],
   mongooseSchema: {

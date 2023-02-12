@@ -1,9 +1,9 @@
 import { GraphQLScalarType } from "graphql";
-import schema from "./schemaType";
+import Ischema from "./schemaType";
 
 export const dateType = new GraphQLScalarType(Date);
 
-const dateSchema: schema = {
+const dateSchema: Ischema = {
   types: [dateType],
 };
 

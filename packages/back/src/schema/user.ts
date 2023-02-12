@@ -7,7 +7,7 @@ import {
 } from "graphql";
 import { Schema } from "mongoose";
 import hashString from "../utils/hash";
-import schema from "./schemaType";
+import Ischema from "./schemaType";
 
 const userMongooseSchema = new Schema({
   _id: Schema.Types.ObjectId,
@@ -97,7 +97,7 @@ export const createUser: GraphQLFieldConfig<any, any, any> = {
   },
 };
 
-const userSchema: schema = {
+const userSchema: Ischema = {
   types: [userInput, userOutput],
   mutations: [createUser],
   queries: [login],

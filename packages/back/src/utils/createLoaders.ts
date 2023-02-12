@@ -13,7 +13,7 @@ function createLoaders(mongooseSchemas: mongooseSchemaDef[]) {
       model(mongoSchema.name, mongoSchema.schema)
     );
   return models.reduce((loaderDefs: loaderDefsType, model) => {
-    const modelName = model.name;
+    const modelName = model.modelName;
     loaderDefs[modelName] = {
       findOneBy: async (criteria: any) => {
         const result = await model.findOne(criteria);

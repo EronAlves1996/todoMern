@@ -18,17 +18,6 @@ const newTask = graphql`
 
 export default function Home() {
   const { user } = useOutletContext<userOutletContext>();
-
-  return (
-    <>
-      <button type="button">Nova Tarefa</button>
-      <NewTaskForm />
-    </>
-  );
-}
-
-function NewTaskForm() {
-  const { register, handleSubmit } = useForm();
   const [commit, isInFlight] = useMutation(newTask);
 
   const submit: SubmitHandler<FieldValues> = (data) => {
@@ -37,14 +26,30 @@ function NewTaskForm() {
     commit({ variables, onCompleted: (r) => console.log(r) });
   };
 
+  //todo: make the NewTaskForm appear only when the button with value "Nova Tarefa" is clicked
   return (
     <>
-      <form onSubmit={handleSubmit(submit)}>
+      <button type="button">Nova Tarefa</button>
+      <NewTaskForm submitter={submit} />
+    </>
+  );
+}
+
+export function NewTaskForm({
+  submitter,
+}: {
+  submitter: SubmitHandler<FieldValues>;
+}) {
+  const { register, handleSubmit } = useForm();
+
+  return (
+    <>
+      <form onSubmit={handleSubmit(submitter)}>
         <LabeledInput
           label="Descrição"
           name="description"
           type="text"
-          {...{ register }}
+          register={register}
         />
         <LabeledInput
           label="Data de Conclusão"

@@ -1,32 +1,21 @@
-import { GraphQLObjectType, GraphQLSchema } from "graphql";
+import {
+  GraphQLFieldConfig,
+  GraphQLNamedType,
+  GraphQLObjectType,
+  GraphQLSchema,
+  ThunkObjMap,
+} from "graphql";
 import { createHandler } from "graphql-http/lib/use/express";
-import { createUser, login, userInput, userOutput } from "../schema/user";
-import userDbAccess from "../dbAccess/user";
-import taskDbAccess from "../dbAccess/task";
-import { taskInput, taskOutput, createTask, dateType } from "../schema/task";
 import { verify } from "jsonwebtoken";
 import configuration from "../config";
+import taskDbAccess from "../dbAccess/task";
+import userDbAccess from "../dbAccess/user";
+import dateSchema from "../schema/date";
+import Ischema from "../schema/schemaType";
+import taskSchema from "../schema/task";
+import userSchema from "../schema/user";
 
-const mutation = new GraphQLObjectType({
-  name: "Mutation",
-  fields: {
-    createUser,
-    createTask,
-  },
-});
-
-const query = new GraphQLObjectType({
-  name: "Query",
-  fields: {
-    login,
-  },
-});
-
-const schema = new GraphQLSchema({
-  types: [userInput, userOutput, taskInput, taskOutput, dateType],
-  mutation,
-  query,
-});
+mountHandler(taskSchema, userSchema, dateSchema);
 
 const graphqlMiddleware = createHandler({
   schema,
@@ -48,5 +37,54 @@ const graphqlMiddleware = createHandler({
     }
   },
 });
+
+function mountHandler(...schemas: Ischema[]) {
+  const types: GraphQLNamedType[] = schemas.reduce((acc, sch) => {
+    if (sch.types) return acc.concat(sch.types);
+    return acc;
+  }, [] as GraphQLNamedType[]);
+
+  const mutationFields = schemas.reduce((acc, sch) => {
+    return { ...acc, ...sch.mutations };
+  }, {}) as ThunkObjMap<GraphQLFieldConfig<any, any, any>>;
+
+  const queryFields: ThunkObjMap<GraphQLFieldConfig<any, any, any>> =
+    schemas.reduce((acc, sch) => {
+      return { ...acc, ...sch.queries };
+    }, {}) as ThunkObjMap<GraphQLFieldConfig<any, any, any>>;
+
+  const schema = mountSchema({ types, mutationFields, queryFields });
+  const context = mountContext();
+  return createHandler({
+    schema,
+    context,
+  });
+}
+
+function mountSchema({
+  types,
+  mutationFields,
+  queryFields,
+}: {
+  types: GraphQLNamedType[];
+  mutationFields: ThunkObjMap<GraphQLFieldConfig<any, any, any>>;
+  queryFields: ThunkObjMap<GraphQLFieldConfig<any, any, any>>;
+}) {
+  return new GraphQLSchema({
+    types,
+    mutation: new GraphQLObjectType({
+      name: "Mutation",
+      fields: { ...mutationFields },
+    }),
+    query: new GraphQLObjectType({
+      name: "Query",
+      fields: { ...queryFields },
+    }),
+  });
+}
+
+function mountContext() {
+  throw new Error("Function not implemented.");
+}
 
 export default graphqlMiddleware;

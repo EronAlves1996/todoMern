@@ -56,13 +56,13 @@ export const createTask: GraphQLFieldConfig<any, any, any> = {
     { deadline, description },
     {
       loaders: {
-        taskDbAccess: { createTask },
+        task: { create },
       },
       userId,
     }
   ) =>
     ensureIdentification(userId, async () => {
-      const createdTask = await createTask({ deadline, description, userId });
+      const createdTask = await create({ deadline, description, userId });
       return createdTask;
     }),
 };

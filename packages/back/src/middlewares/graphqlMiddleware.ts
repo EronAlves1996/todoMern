@@ -7,14 +7,21 @@ import {
 } from "graphql";
 import { createHandler } from "graphql-http/lib/use/express";
 import { verify } from "jsonwebtoken";
-import { model, Model, Types } from "mongoose";
 import configuration from "../config";
 import dateSchema from "../schema/date";
-import Ischema, { mongooseSchemaDef } from "../schema/schemaType";
+import Ischema from "../schema/schemaType";
 import taskSchema from "../schema/task";
 import userSchema from "../schema/user";
+import createLoaders from "../utils/createLoaders";
 
-const graphqlMiddleware = mountHandler(taskSchema, userSchema, dateSchema);
+const schemas = [taskSchema, userSchema, dateSchema];
+
+export const loaders = createLoaders(
+  schemas
+    .filter((s) => s.mongooseSchema != undefined)
+    .map((s) => s.mongooseSchema!)
+);
+const graphqlMiddleware = mountHandler(...schemas);
 
 function mountHandler(...schemas: Ischema[]) {
   const types: GraphQLNamedType[] = schemas.reduce((acc, sch) => {
@@ -32,11 +39,7 @@ function mountHandler(...schemas: Ischema[]) {
     }, {}) as ThunkObjMap<GraphQLFieldConfig<any, any, any>>;
 
   const schema = mountSchema({ types, mutationFields, queryFields });
-  const context = mountContext(
-    ...schemas
-      .filter((s) => s.mongooseSchema != undefined)
-      .map((s) => s.mongooseSchema!)
-  );
+  const context = mountContext();
   return createHandler({
     schema,
     context,
@@ -65,9 +68,9 @@ function mountSchema({
   });
 }
 
-function mountContext(...mongooseSchemas: mongooseSchemaDef[]) {
+function mountContext() {
   return async (req: any, params: any) => {
-    let returnObject: any = { loaders: createLoaders(mongooseSchemas) };
+    let returnObject: any = { loaders };
     try {
       const headers = req.headers as any;
       const cookie: string | null = headers["cookie"];
@@ -85,36 +88,4 @@ function mountContext(...mongooseSchemas: mongooseSchemaDef[]) {
   };
 }
 
-type loaderDefsType = {
-  [key: string]: {
-    [key: string]: (arg: any) => Promise<any>;
-  };
-};
-
-function createLoaders(mongooseSchemas: mongooseSchemaDef[]) {
-  const models: Model<any, unknown, unknown, unknown, any>[] =
-    mongooseSchemas.map((mongoSchema) =>
-      model(mongoSchema.name, mongoSchema.schema)
-    );
-  return models.reduce((loaderDefs: loaderDefsType, model) => {
-    const modelName = model.name;
-    loaderDefs[modelName] = {
-      findOneBy: async (criteria: any) => {
-        const result = await model.findOne(criteria);
-        return result.toObject();
-      },
-      findManyBy: async (criteria: any) => {
-        const result = await model.find(criteria);
-        return result.map((r) => r.toObject());
-      },
-      create: async (entity: any) => {
-        const _id = new Types.ObjectId();
-        const createdDoc = new Model({ ...entity, _id });
-        const docSaved = await createdDoc.save();
-        return docSaved.toObject();
-      },
-    };
-    return loaderDefs;
-  }, {});
-}
 export default graphqlMiddleware;

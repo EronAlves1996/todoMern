@@ -73,9 +73,23 @@ const createTask: GraphQLFieldConfig<any, any, any> = {
     }),
 };
 
+const loadTasks: GraphQLFieldConfig<any, any, any> = {
+  type: taskOutput,
+  args: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  resolve: async (_, { userId }, ctx) =>
+    ensureIdentification(ctx.userId, async () => {
+      if (userId !== ctx.userId)
+        throw new Error("You don't have access to the tasks of other user");
+      return await ctx.loaders.task.findManyBy({ userId });
+    }),
+};
+
 const taskSchema: Ischema = {
   types: [taskOutput, taskInput],
   mutations: { createTask },
+  queries: { loadTasks },
   mongooseSchema: {
     name: "task",
     schema: taskMongooseSchema,

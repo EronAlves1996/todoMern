@@ -1,9 +1,15 @@
 import { Suspense } from "react";
-import { ErrorBoundary } from "react-error-boundary";
 import { FieldValues, SubmitHandler } from "react-hook-form";
-import { graphql, useLazyLoadQuery, useMutation } from "react-relay";
+import {
+  graphql,
+  loadQuery,
+  PreloadedQuery,
+  useMutation,
+  usePreloadedQuery,
+} from "react-relay";
 import { useOutletContext } from "react-router-dom";
 import { userOutletContext } from "../../../../App";
+import { RelayEnvironment } from "../../../../RelayEnvironment";
 import { NewTaskForm } from "./NewTaskForm";
 import { HomeQuery } from "./__generated__/HomeQuery.graphql";
 
@@ -33,7 +39,7 @@ const loadTasks = graphql`
 export default function Home() {
   const { user } = useOutletContext<userOutletContext>();
   const [commit, isInFlight] = useMutation(newTask);
-  const tasks = useLazyLoadQuery<HomeQuery>(loadTasks, {
+  const taskQuery = loadQuery<HomeQuery>(RelayEnvironment, loadTasks, {
     id: user?._id!,
   });
   const submit: SubmitHandler<FieldValues> = (data) => {
@@ -48,13 +54,7 @@ export default function Home() {
       <NewTaskForm submitter={submit} />
 
       <Suspense fallback={<p>Carregando...</p>}>
-        <div>
-          {tasks.loadTasks?.map((t) => (
-            <div key={t?._id}>
-              <TaskRow task={t} />
-            </div>
-          ))}
-        </div>
+        <TaskDisplay query={taskQuery} />
       </Suspense>
     </>
   );
@@ -75,6 +75,19 @@ function TaskRow({
       <p>{task?.description}</p>
       <p>{task?.deadline}</p>
       <p>{task?.isCompleted.toString()}</p>
+    </>
+  );
+}
+
+function TaskDisplay({ query }: { query: PreloadedQuery<HomeQuery, {}> }) {
+  const data = usePreloadedQuery(loadTasks, query);
+
+  return (
+    <>
+      {data.loadTasks!.map((t) => (
+        <TaskRow task={t} />
+      ))}
+      ;
     </>
   );
 }

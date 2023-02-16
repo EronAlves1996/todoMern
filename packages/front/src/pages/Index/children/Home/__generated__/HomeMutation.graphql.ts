@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b1ad43046680fcb02af51671cdb8cb8b>>
+ * @generated SignedSource<<39cd6a0e17b0a11a69bc647d4d0386da>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -53,7 +53,7 @@ v2 = [
         "variableName": "description"
       }
     ],
-    "concreteType": "taskOutput",
+    "concreteType": "TaskOutput",
     "kind": "LinkedField",
     "name": "createTask",
     "plural": false,

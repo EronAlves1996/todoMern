@@ -5,6 +5,7 @@ import { graphql, useLazyLoadQuery, useMutation } from "react-relay";
 import { useOutletContext } from "react-router-dom";
 import { userOutletContext } from "../../../../App";
 import { NewTaskForm } from "./NewTaskForm";
+import { HomeQuery } from "./__generated__/HomeQuery.graphql";
 
 const newTask = graphql`
   mutation HomeMutation($description: String!, $deadline: Date!) {
@@ -20,7 +21,7 @@ const newTask = graphql`
 
 const loadTasks = graphql`
   query HomeQuery($id: String!) {
-    loadTasks {
+    loadTasks(userId: $id) {
       _id
       description
       deadline
@@ -32,8 +33,9 @@ const loadTasks = graphql`
 export default function Home() {
   const { user } = useOutletContext<userOutletContext>();
   const [commit, isInFlight] = useMutation(newTask);
-  const tasks = useLazyLoadQuery(loadTasks, { id: user?._id });
-
+  const tasks = useLazyLoadQuery<HomeQuery>(loadTasks, {
+    id: user?._id!,
+  });
   const submit: SubmitHandler<FieldValues> = (data) => {
     const variables = data;
     commit({ variables, onCompleted: (r) => console.log(r) });
@@ -58,8 +60,12 @@ export default function Home() {
       >
         <Suspense fallback={<p>Carregando...</p>}>
           <div>
-            {tasks.map((t) => (
-              <div key={t._id}></div>
+            {tasks.loadTasks?.map((t) => (
+              <div key={t?._id}>
+                <p>{t?.description}</p>
+                <p>{t?.deadline}</p>
+                <p>{t?.isCompleted.toString()}</p>
+              </div>
             ))}
           </div>
         </Suspense>

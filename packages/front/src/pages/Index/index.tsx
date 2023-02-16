@@ -36,7 +36,9 @@ function Index() {
         outletContext.setUser(json);
       })
       .catch((err) => {
-        navigate("/", { state: { msg: err.msg } });
+        if (err instanceof Error) {
+          navigate("/", { state: { msg: err.message } });
+        }
       });
   };
 

@@ -12,7 +12,7 @@ type Mutation {
 }
 
 type Query {
-  loadTasks(userId: String!): TaskOutput
+  loadTasks(userId: String!): [TaskOutput]
   login(email: String!, password: String!): UserOutput
 }
 

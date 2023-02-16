@@ -2,6 +2,7 @@ import {
   GraphQLBoolean,
   GraphQLFieldConfig,
   GraphQLInputObjectType,
+  GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLString,
@@ -74,7 +75,7 @@ const createTask: GraphQLFieldConfig<any, any, any> = {
 };
 
 const loadTasks: GraphQLFieldConfig<any, any, any> = {
-  type: taskOutput,
+  type: new GraphQLList(taskOutput),
   args: {
     userId: { type: new GraphQLNonNull(GraphQLString) },
   },

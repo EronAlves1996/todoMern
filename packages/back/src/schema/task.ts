@@ -30,7 +30,7 @@ const task = {
   isCompleted: { type: new GraphQLNonNull(GraphQLBoolean) },
 };
 
-export const taskOutput = new GraphQLObjectType({
+const taskOutput = new GraphQLObjectType({
   name: "TaskOutput",
   fields: {
     _id: { type: GraphQLString },
@@ -38,14 +38,14 @@ export const taskOutput = new GraphQLObjectType({
   },
 });
 
-export const taskInput = new GraphQLInputObjectType({
+const taskInput = new GraphQLInputObjectType({
   name: "TaskInput",
   fields: {
     ...task,
   },
 });
 
-export const createTask: GraphQLFieldConfig<any, any, any> = {
+const createTask: GraphQLFieldConfig<any, any, any> = {
   type: taskOutput,
   args: {
     deadline: { type: new GraphQLNonNull(dateType) },

@@ -7,22 +7,23 @@ directive @specifiedBy(
 scalar Date
 
 type Mutation {
+  createTask(deadline: Date!, description: String!): TaskOutput
   createUser(user: UserInput): UserOutput
-  createTask(deadline: Date!, description: String!): taskOutput
 }
 
 type Query {
+  loadTasks(userId: String!): TaskOutput
   login(email: String!, password: String!): UserOutput
 }
 
-input taskInput {
+input TaskInput {
   description: String!
   creationDate: Date!
   deadline: Date!
   isCompleted: Boolean!
 }
 
-type taskOutput {
+type TaskOutput {
   _id: String
   description: String!
   creationDate: Date!

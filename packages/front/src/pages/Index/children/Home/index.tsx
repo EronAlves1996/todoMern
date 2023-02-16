@@ -1,5 +1,7 @@
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { FieldValues, SubmitHandler } from "react-hook-form";
-import { graphql, useMutation } from "react-relay";
+import { graphql, useLazyLoadQuery, useMutation } from "react-relay";
 import { useOutletContext } from "react-router-dom";
 import { userOutletContext } from "../../../../App";
 import { NewTaskForm } from "./NewTaskForm";
@@ -16,13 +18,24 @@ const newTask = graphql`
   }
 `;
 
+const loadTasks = graphql`
+  query HomeQuery($id: String!) {
+    loadTasks {
+      _id
+      description
+      deadline
+      isCompleted
+    }
+  }
+`;
+
 export default function Home() {
   const { user } = useOutletContext<userOutletContext>();
   const [commit, isInFlight] = useMutation(newTask);
+  const tasks = useLazyLoadQuery(loadTasks, { id: user?._id });
 
   const submit: SubmitHandler<FieldValues> = (data) => {
-    const { description, deadline } = data;
-    const variables = { description, deadline };
+    const variables = data;
     commit({ variables, onCompleted: (r) => console.log(r) });
   };
 
@@ -31,6 +44,26 @@ export default function Home() {
     <>
       <button type="button">Nova Tarefa</button>
       <NewTaskForm submitter={submit} />
+      <ErrorBoundary
+        FallbackComponent={({ error, resetErrorBoundary }) => {
+          return (
+            <div>
+              <p style={{ color: "red", fontWeight: "bold" }}>
+                Ocorreu um erro ao carregar suas tarefas!!
+              </p>
+              <button onClick={resetErrorBoundary}>Tentar novamente</button>
+            </div>
+          );
+        }}
+      >
+        <Suspense fallback={<p>Carregando...</p>}>
+          <div>
+            {tasks.map((t) => (
+              <div key={t._id}></div>
+            ))}
+          </div>
+        </Suspense>
+      </ErrorBoundary>
     </>
   );
 }

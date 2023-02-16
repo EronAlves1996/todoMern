@@ -46,30 +46,35 @@ export default function Home() {
     <>
       <button type="button">Nova Tarefa</button>
       <NewTaskForm submitter={submit} />
-      <ErrorBoundary
-        FallbackComponent={({ error, resetErrorBoundary }) => {
-          return (
-            <div>
-              <p style={{ color: "red", fontWeight: "bold" }}>
-                Ocorreu um erro ao carregar suas tarefas!!
-              </p>
-              <button onClick={resetErrorBoundary}>Tentar novamente</button>
+
+      <Suspense fallback={<p>Carregando...</p>}>
+        <div>
+          {tasks.loadTasks?.map((t) => (
+            <div key={t?._id}>
+              <TaskRow task={t} />
             </div>
-          );
-        }}
-      >
-        <Suspense fallback={<p>Carregando...</p>}>
-          <div>
-            {tasks.loadTasks?.map((t) => (
-              <div key={t?._id}>
-                <p>{t?.description}</p>
-                <p>{t?.deadline}</p>
-                <p>{t?.isCompleted.toString()}</p>
-              </div>
-            ))}
-          </div>
-        </Suspense>
-      </ErrorBoundary>
+          ))}
+        </div>
+      </Suspense>
+    </>
+  );
+}
+
+function TaskRow({
+  task,
+}: {
+  task: {
+    readonly _id: string | null;
+    readonly deadline: any;
+    readonly description: string;
+    readonly isCompleted: boolean;
+  } | null;
+}) {
+  return (
+    <>
+      <p>{task?.description}</p>
+      <p>{task?.deadline}</p>
+      <p>{task?.isCompleted.toString()}</p>
     </>
   );
 }

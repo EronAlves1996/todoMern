@@ -79,7 +79,11 @@ function TaskRow({
   );
 }
 
-function TaskDisplay({ query }: { query: PreloadedQuery<HomeQuery, {}> }) {
+export function TaskDisplay({
+  query,
+}: {
+  query: PreloadedQuery<HomeQuery, {}>;
+}) {
   const data = usePreloadedQuery(loadTasks, query);
 
   return (

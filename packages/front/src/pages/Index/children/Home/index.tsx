@@ -1,16 +1,11 @@
 import { Suspense } from "react";
 import { FieldValues, SubmitHandler } from "react-hook-form";
-import {
-  graphql,
-  loadQuery,
-  PreloadedQuery,
-  useMutation,
-  usePreloadedQuery,
-} from "react-relay";
+import { graphql, loadQuery, useMutation } from "react-relay";
 import { useOutletContext } from "react-router-dom";
 import { userOutletContext } from "../../../../App";
 import { RelayEnvironment } from "../../../../RelayEnvironment";
 import { NewTaskForm } from "./NewTaskForm";
+import { TaskDisplay } from "./TaskDisplay";
 import { HomeQuery } from "./__generated__/HomeQuery.graphql";
 
 const newTask = graphql`
@@ -25,7 +20,7 @@ const newTask = graphql`
   }
 `;
 
-const loadTasks = graphql`
+export const loadTasks = graphql`
   query HomeQuery($id: String!) {
     loadTasks(userId: $id) {
       _id
@@ -54,44 +49,8 @@ export default function Home() {
       <NewTaskForm submitter={submit} />
 
       <Suspense fallback={<p>Carregando...</p>}>
-        <TaskDisplay query={taskQuery} />
+        <TaskDisplay query={taskQuery} gqlNode={loadTasks} />
       </Suspense>
-    </>
-  );
-}
-
-function TaskRow({
-  task,
-}: {
-  task: {
-    readonly _id: string | null;
-    readonly deadline: any;
-    readonly description: string;
-    readonly isCompleted: boolean;
-  } | null;
-}) {
-  return (
-    <>
-      <p>{task?.description}</p>
-      <p>{task?.deadline}</p>
-      <p>{task?.isCompleted.toString()}</p>
-    </>
-  );
-}
-
-export function TaskDisplay({
-  query,
-}: {
-  query: PreloadedQuery<HomeQuery, {}>;
-}) {
-  const data = usePreloadedQuery(loadTasks, query);
-
-  return (
-    <>
-      {data.loadTasks!.map((t) => (
-        <TaskRow task={t} />
-      ))}
-      ;
     </>
   );
 }

@@ -2,6 +2,7 @@ import {
   GraphQLBoolean,
   GraphQLFieldConfig,
   GraphQLInputObjectType,
+  GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLString,
@@ -30,7 +31,7 @@ const task = {
   isCompleted: { type: new GraphQLNonNull(GraphQLBoolean) },
 };
 
-export const taskOutput = new GraphQLObjectType({
+const taskOutput = new GraphQLObjectType({
   name: "TaskOutput",
   fields: {
     _id: { type: GraphQLString },
@@ -38,14 +39,14 @@ export const taskOutput = new GraphQLObjectType({
   },
 });
 
-export const taskInput = new GraphQLInputObjectType({
+const taskInput = new GraphQLInputObjectType({
   name: "TaskInput",
   fields: {
     ...task,
   },
 });
 
-export const createTask: GraphQLFieldConfig<any, any, any> = {
+const createTask: GraphQLFieldConfig<any, any, any> = {
   type: taskOutput,
   args: {
     deadline: { type: new GraphQLNonNull(dateType) },
@@ -73,9 +74,23 @@ export const createTask: GraphQLFieldConfig<any, any, any> = {
     }),
 };
 
+const loadTasks: GraphQLFieldConfig<any, any, any> = {
+  type: new GraphQLList(taskOutput),
+  args: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  resolve: async (_, { userId }, ctx) =>
+    ensureIdentification(ctx.userId, async () => {
+      if (userId !== ctx.userId)
+        throw new Error("You don't have access to the tasks of other user");
+      return await ctx.loaders.task.findManyBy({ userId });
+    }),
+};
+
 const taskSchema: Ischema = {
   types: [taskOutput, taskInput],
   mutations: { createTask },
+  queries: { loadTasks },
   mongooseSchema: {
     name: "task",
     schema: taskMongooseSchema,

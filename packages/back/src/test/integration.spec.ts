@@ -94,6 +94,7 @@ describe("overall integration test", () => {
 
   describe("task features", () => {
     let id: string;
+    let jwtLogin: string;
 
     beforeAll(async () => {
       const response = await postToGraphQl(testBed)
@@ -146,6 +147,33 @@ describe("overall integration test", () => {
       expect(year).toBe(new Date().getFullYear());
       expect(day).toBe(new Date().getDate());
       expect(month).toBe(new Date().getMonth());
+    });
+
+    test("should read the created task", async () => {
+      const jwtLogin = sign(id, configuration.JWT_SECRET);
+      const response = await postToGraphQl(testBed)
+        .send({
+          query: `
+        query LoadTaskQuery($id: String!){
+          loadTasks(userId: $id){
+            _id
+            description,
+            creationDate,
+            deadline,
+            isCompleted
+          }
+        }
+        `,
+          variables: {
+            id,
+          },
+        })
+        .set("Cookie", configuration.COOKIE_NAME.concat("=", jwtLogin));
+      const { loadTasks } = response.body.data;
+
+      expect(loadTasks.length).toBe(1);
+      expect(loadTasks[0].isCompleted).toBeFalsy();
+      expect(loadTasks[0]._id).toBeTruthy();
     });
   });
 

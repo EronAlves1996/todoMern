@@ -26,21 +26,22 @@ const loginMiddleware = async (req: Request, res: Response) => {
   const [email, password] = unencodeCredentials(authorization!);
   const hashedPassword = hashString(password);
 
-  const findedUser = await findOneBy({ email, password: hashedPassword });
-
-  if (findedUser == null) {
+  try {
+    const findedUser = await findOneBy({ email, password: hashedPassword });
+    const userAsObject = erasePasswordInformation(findedUser);
+    res.cookie(
+      configuration.COOKIE_NAME,
+      jwt.sign(
+        userAsObject._id?.toString() as string,
+        configuration.JWT_SECRET
+      ),
+      { httpOnly: true, maxAge: 1 * WEEK }
+    );
+    res.status(200);
+    res.send(userAsObject);
+  } catch (err) {
     send403(res);
   }
-
-  const userAsObject = erasePasswordInformation(findedUser);
-
-  res.cookie(
-    configuration.COOKIE_NAME,
-    jwt.sign(userAsObject._id?.toString() as string, configuration.JWT_SECRET),
-    { httpOnly: true, maxAge: 1 * WEEK }
-  );
-  res.status(200);
-  res.send(userAsObject);
 };
 
 export default loginMiddleware;

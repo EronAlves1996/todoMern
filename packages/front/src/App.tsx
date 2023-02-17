@@ -1,4 +1,5 @@
 import { Suspense, useEffect, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import {
   NavigateFunction,
   Outlet,
@@ -53,8 +54,15 @@ export default function App() {
   useVerifyUserLogin({ user, setUser }, navigate);
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Outlet context={{ user, setUser }} />
-    </Suspense>
+    <ErrorBoundary
+      FallbackComponent={({ error, resetErrorBoundary }) => {
+        resetErrorBoundary();
+        return <></>;
+      }}
+    >
+      <Suspense fallback={<div>Loading...</div>}>
+        <Outlet context={{ user, setUser }} />
+      </Suspense>
+    </ErrorBoundary>
   );
 }

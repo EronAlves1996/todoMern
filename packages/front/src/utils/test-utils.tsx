@@ -1,9 +1,12 @@
 import { fireEvent, render, RenderOptions } from "@testing-library/react";
 import { PropsWithChildren, ReactElement } from "react";
+import { createMockEnvironment } from "relay-test-utils";
 import Providers from "../providers";
 
+const environment = createMockEnvironment();
+
 const AllTheProviders = ({ children }: PropsWithChildren) => {
-  return <Providers>{children}</Providers>;
+  return <Providers environment={environment}>{children}</Providers>;
 };
 
 const customRender = (
@@ -20,4 +23,4 @@ export async function typeInto(element: HTMLElement, value: string) {
 }
 
 export * from "@testing-library/react";
-export { customRender as render };
+export { customRender as render, environment };

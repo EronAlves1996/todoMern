@@ -96,7 +96,16 @@ function EditTaskForm({
         </select>
         <button type="submit">Salvar</button>
       </form>
-      <button onClick={() => {}}>Deletar</button>
+      <button
+        onClick={() => {
+          deleteTask({
+            variables: { taskId: data.loadTask?._id },
+            onCompleted: (res, err) => refetch!(),
+          });
+        }}
+      >
+        Deletar
+      </button>
     </>
   );
 }

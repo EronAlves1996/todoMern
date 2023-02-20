@@ -9,6 +9,7 @@ scalar Date
 type Mutation {
   createTask(deadline: Date!, description: String!): TaskOutput
   updateTask(id: String!, task: TaskInput): TaskOutput
+  deleteTask(id: String!): TaskOutput
   createUser(user: UserInput): UserOutput
 }
 

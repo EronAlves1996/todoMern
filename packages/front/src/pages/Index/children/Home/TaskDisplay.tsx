@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { createContext, useCallback, useReducer, useState } from "react";
 import {
   graphql,
   GraphQLTaggedNode,
   loadQuery,
   PreloadedQuery,
   usePreloadedQuery,
+  useQueryLoader,
 } from "react-relay";
+import { useOutletContext } from "react-router-dom";
+import { userOutletContext } from "../../../../App";
 import { RelayEnvironment } from "../../../../RelayEnvironment";
 import EditTaskForm from "./EditTaskForm";
 import { HomeQuery } from "./__generated__/HomeQuery.graphql";
@@ -64,6 +67,8 @@ function TaskRow({
   );
 }
 
+export const RefecthContext = createContext<null | (() => void)>(null);
+
 export function TaskDisplay({
   query,
   gqlNode,
@@ -71,13 +76,35 @@ export function TaskDisplay({
   query: PreloadedQuery<HomeQuery, Record<string, unknown>> | null | undefined;
   gqlNode: GraphQLTaggedNode;
 }) {
+  const [queryRef, queryReloader] = useQueryLoader<HomeQuery>(gqlNode, query);
+  const { user } = useOutletContext<userOutletContext>();
+  const refetch = useCallback(() => {
+    queryReloader({ id: user?._id as string });
+  }, []);
+  return (
+    <>
+      <RefecthContext.Provider value={refetch}>
+        <TaskLoader query={queryRef} gqlNode={gqlNode} />
+      </RefecthContext.Provider>
+      ;
+    </>
+  );
+}
+
+function TaskLoader({
+  query,
+  gqlNode,
+}: {
+  query: PreloadedQuery<HomeQuery, Record<string, unknown>> | null | undefined;
+  gqlNode: GraphQLTaggedNode;
+}) {
   const data = usePreloadedQuery(gqlNode, query!);
+
   return (
     <>
       {data.loadTasks!.map((t) => (
         <TaskRow task={t} key={t?._id} />
       ))}
-      ;
     </>
   );
 }

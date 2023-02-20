@@ -1,6 +1,6 @@
-import { createContext, Suspense, useCallback } from "react";
+import { Suspense } from "react";
 import { FieldValues, SubmitHandler } from "react-hook-form";
-import { graphql, loadQuery, useMutation, useQueryLoader } from "react-relay";
+import { graphql, loadQuery, useMutation } from "react-relay";
 import { useOutletContext } from "react-router-dom";
 import { userOutletContext } from "../../../../App";
 import { RelayEnvironment } from "../../../../RelayEnvironment";
@@ -31,19 +31,12 @@ export const loadTasks = graphql`
   }
 `;
 
-const homeQuery = require("./__generated__/HomeQuery.graphql");
-export const RefecthContext = createContext<() => void>(() => {});
-
 export default function Home() {
   const { user } = useOutletContext<userOutletContext>();
   const [commit, isInFlight] = useMutation(newTask);
-  const [taskQuery, loadTaskQuery] = useQueryLoader<HomeQuery>(
-    homeQuery,
-    loadQuery<HomeQuery>(RelayEnvironment, loadTasks, { id: user?._id! })
-  );
-  const refetch = useCallback(() => {
-    loadTaskQuery({ id: user?._id! });
-  }, []);
+  const taskQuery = loadQuery<HomeQuery>(RelayEnvironment, loadTasks, {
+    id: user?._id!,
+  });
   const submit: SubmitHandler<FieldValues> = (data) => {
     const variables = data;
     commit({ variables, onCompleted: (r) => console.log(r) });
@@ -56,9 +49,7 @@ export default function Home() {
       <NewTaskForm submitter={submit} />
 
       <Suspense fallback={<p>Carregando...</p>}>
-        <RefecthContext.Provider value={refetch}>
-          <TaskDisplay query={taskQuery} gqlNode={loadTasks} />
-        </RefecthContext.Provider>
+        <TaskDisplay query={taskQuery} gqlNode={loadTasks} />
       </Suspense>
     </>
   );

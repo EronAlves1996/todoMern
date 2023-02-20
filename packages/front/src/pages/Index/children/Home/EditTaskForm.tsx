@@ -7,7 +7,7 @@ import {
   useMutation,
   usePreloadedQuery,
 } from "react-relay";
-import { RefecthContext } from ".";
+import { RefecthContext } from "./TaskDisplay";
 import { TaskDisplayQuery } from "./__generated__/TaskDisplayQuery.graphql";
 
 const editTaskFormMutation = graphql`
@@ -61,7 +61,7 @@ function EditTaskForm({
             },
             onCompleted: (res, err) => {
               showControllers[1](false);
-              refetch();
+              refetch!();
             },
           });
         })}

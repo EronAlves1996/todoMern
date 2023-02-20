@@ -50,9 +50,14 @@ function TaskRow({
         onClick={() => setShowTaskForm(!showTaskForm)}
         onMouseEnter={() => {
           setQuery(
-            loadQuery(RelayEnvironment, taskDisplayQuery, {
-              taskId: task?._id!,
-            })
+            loadQuery(
+              RelayEnvironment,
+              taskDisplayQuery,
+              {
+                taskId: task?._id!,
+              },
+              { fetchPolicy: "network-only" }
+            )
           );
         }}
       >

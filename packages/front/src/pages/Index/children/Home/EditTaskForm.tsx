@@ -21,6 +21,14 @@ const editTaskFormMutation = graphql`
   }
 `;
 
+const deleteTaskMutation = graphql`
+mutation DeleteTaskMutation($taskId: String!){
+  deleteTask(id: $taskId){
+    
+  }
+}
+`;
+
 function getDateFormFormatFrom(dateString: string) {
   const date = new Date(Date.parse(dateString));
   const month = date.getMonth() + 1;
@@ -40,6 +48,7 @@ function EditTaskForm({
   if (!showControllers[0]) return null;
 
   const [commmit, isOnFlight] = useMutation(editTaskFormMutation);
+  const [deleteTask, isOnDeleting] = useMutation(deleteTaskMutation);
   const { register, handleSubmit } = useForm();
   const data = usePreloadedQuery<TaskDisplayQuery>(graphqlTag, query);
   const formattedDate = getDateFormFormatFrom(data.loadTask?.deadline);
@@ -87,6 +96,7 @@ function EditTaskForm({
         </select>
         <button type="submit">Salvar</button>
       </form>
+      <button onClick={() => {}}>Deletar</button>
     </>
   );
 }

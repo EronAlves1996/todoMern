@@ -3,7 +3,7 @@ import { mongooseSchemaDef } from "../schema/schemaType";
 
 type loaderDefsType = {
   [key: string]: {
-    [key: string]: (arg: any) => Promise<any>;
+    [key: string]: (...args: any) => Promise<any>;
   };
 };
 
@@ -32,6 +32,12 @@ function createLoaders(mongooseSchemas: mongooseSchemaDef[]) {
       existsBy: async (criteria: any) => {
         const exists = await model.exists(criteria);
         return !!exists;
+      },
+      updateWhere: async (criteria: any, entity: any) => {
+        const updated = await model.findOneAndUpdate(criteria, entity, {
+          new: true,
+        });
+        return updated.toObject();
       },
     };
     return loaderDefs;

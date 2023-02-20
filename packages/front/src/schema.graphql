@@ -8,11 +8,13 @@ scalar Date
 
 type Mutation {
   createTask(deadline: Date!, description: String!): TaskOutput
+  updateTask(id: String!, task: TaskInput): TaskOutput
   createUser(user: UserInput): UserOutput
 }
 
 type Query {
   loadTasks(userId: String!): [TaskOutput]
+  loadTask(id: String!): TaskOutput
   login(email: String!, password: String!): UserOutput
 }
 

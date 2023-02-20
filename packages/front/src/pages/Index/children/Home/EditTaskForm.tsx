@@ -1,4 +1,4 @@
-import React, { SetStateAction } from "react";
+import React, { SetStateAction, useContext } from "react";
 import { useForm } from "react-hook-form";
 import {
   graphql,
@@ -7,6 +7,7 @@ import {
   useMutation,
   usePreloadedQuery,
 } from "react-relay";
+import { RefecthContext } from ".";
 import { TaskDisplayQuery } from "./__generated__/TaskDisplayQuery.graphql";
 
 const editTaskFormMutation = graphql`
@@ -42,6 +43,7 @@ function EditTaskForm({
   const { register, handleSubmit } = useForm();
   const data = usePreloadedQuery<TaskDisplayQuery>(graphqlTag, query);
   const formattedDate = getDateFormFormatFrom(data.loadTask?.deadline);
+  const refetch = useContext(RefecthContext);
 
   return (
     <>
@@ -59,6 +61,7 @@ function EditTaskForm({
             },
             onCompleted: (res, err) => {
               showControllers[1](false);
+              refetch();
             },
           });
         })}

@@ -1,4 +1,4 @@
-import { Suspense, useCallback } from "react";
+import { createContext, Suspense, useCallback } from "react";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { graphql, loadQuery, useMutation, useQueryLoader } from "react-relay";
 import { useOutletContext } from "react-router-dom";
@@ -32,6 +32,7 @@ export const loadTasks = graphql`
 `;
 
 const homeQuery = require("./__generated__/HomeQuery.graphql");
+export const RefecthContext = createContext<() => void>(() => {});
 
 export default function Home() {
   const { user } = useOutletContext<userOutletContext>();
@@ -55,7 +56,9 @@ export default function Home() {
       <NewTaskForm submitter={submit} />
 
       <Suspense fallback={<p>Carregando...</p>}>
-        <TaskDisplay query={taskQuery} gqlNode={loadTasks} />
+        <RefecthContext.Provider value={refetch}>
+          <TaskDisplay query={taskQuery} gqlNode={loadTasks} />
+        </RefecthContext.Provider>
       </Suspense>
     </>
   );

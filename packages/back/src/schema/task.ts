@@ -87,10 +87,39 @@ const loadTasks: GraphQLFieldConfig<any, any, any> = {
     }),
 };
 
+const loadTask: GraphQLFieldConfig<any, any, any> = {
+  type: taskOutput,
+  args: {
+    id: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  resolve: async (_, { id }, ctx) =>
+    ensureIdentification(ctx.userId, async () => {
+      const task = await ctx.loaders.task.findOneBy({ _id: id });
+      if (task.userId != ctx.userId)
+        throw new Error("You don't have access on this task");
+      return task;
+    }),
+};
+
+const updateTask: GraphQLFieldConfig<any, any, any> = {
+  type: taskOutput,
+  args: {
+    id: { type: new GraphQLNonNull(GraphQLString) },
+    task: { type: taskInput },
+  },
+  resolve: async (_, { id, task }, ctx) =>
+    ensureIdentification(ctx.userId, async () => {
+      return await ctx.loaders.task.updateWhere(
+        { _id: id, userId: ctx.userId },
+        { _id: id, ...task }
+      );
+    }),
+};
+
 const taskSchema: Ischema = {
   types: [taskOutput, taskInput],
-  mutations: { createTask },
-  queries: { loadTasks },
+  mutations: { createTask, updateTask },
+  queries: { loadTasks, loadTask },
   mongooseSchema: {
     name: "task",
     schema: taskMongooseSchema,

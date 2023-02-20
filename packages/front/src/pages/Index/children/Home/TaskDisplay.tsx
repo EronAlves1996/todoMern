@@ -68,10 +68,10 @@ export function TaskDisplay({
   query,
   gqlNode,
 }: {
-  query: PreloadedQuery<HomeQuery, {}>;
+  query: PreloadedQuery<HomeQuery, Record<string, unknown>> | null | undefined;
   gqlNode: GraphQLTaggedNode;
 }) {
-  const data = usePreloadedQuery(gqlNode, query);
+  const data = usePreloadedQuery(gqlNode, query!);
   return (
     <>
       {data.loadTasks!.map((t) => (

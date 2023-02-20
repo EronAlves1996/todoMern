@@ -79,14 +79,13 @@ export function TaskDisplay({
   const [queryRef, queryReloader] = useQueryLoader<HomeQuery>(gqlNode, query);
   const { user } = useOutletContext<userOutletContext>();
   const refetch = useCallback(() => {
-    queryReloader({ id: user?._id as string });
+    queryReloader({ id: user?._id as string }, { fetchPolicy: "network-only" });
   }, []);
   return (
     <>
       <RefecthContext.Provider value={refetch}>
         <TaskLoader query={queryRef} gqlNode={gqlNode} />
       </RefecthContext.Provider>
-      ;
     </>
   );
 }

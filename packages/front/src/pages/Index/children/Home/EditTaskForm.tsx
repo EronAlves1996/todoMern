@@ -7,6 +7,7 @@ import {
   useMutation,
   usePreloadedQuery,
 } from "react-relay";
+import DeleteTaskButton from "./DeleteTaskButton";
 import { RefecthContext } from "./TaskDisplay";
 import { TaskDisplayQuery } from "./__generated__/TaskDisplayQuery.graphql";
 
@@ -42,8 +43,8 @@ function EditTaskForm({
   const [commmit, isOnFlight] = useMutation(editTaskFormMutation);
   const { register, handleSubmit } = useForm();
   const data = usePreloadedQuery<TaskDisplayQuery>(graphqlTag, query);
-  const formattedDate = getDateFormFormatFrom(data.loadTask?.deadline);
   const refetch = useContext(RefecthContext);
+  const formattedDate = getDateFormFormatFrom(data.loadTask?.deadline);
 
   return (
     <>
@@ -87,6 +88,7 @@ function EditTaskForm({
         </select>
         <button type="submit">Salvar</button>
       </form>
+      <DeleteTaskButton id={data.loadTask?._id as string} />
     </>
   );
 }

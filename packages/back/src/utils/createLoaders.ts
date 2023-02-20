@@ -39,6 +39,10 @@ function createLoaders(mongooseSchemas: mongooseSchemaDef[]) {
         });
         return updated.toObject();
       },
+      delete: async (criteria: any) => {
+        const deleted = await model.findOneAndDelete(criteria);
+        return deleted.toObject();
+      },
     };
     return loaderDefs;
   }, {});

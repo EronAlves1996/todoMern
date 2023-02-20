@@ -116,9 +116,20 @@ const updateTask: GraphQLFieldConfig<any, any, any> = {
     }),
 };
 
+const deleteTask: GraphQLFieldConfig<any, any, any> = {
+  type: taskOutput,
+  args: {
+    id: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  resolve: async (_, { id }, ctx) =>
+    ensureIdentification(ctx.userId, async () => {
+      return await ctx.loaders.task.delete({ _id: id, userId: ctx.userId });
+    }),
+};
+
 const taskSchema: Ischema = {
   types: [taskOutput, taskInput],
-  mutations: { createTask, updateTask },
+  mutations: { createTask, updateTask, deleteTask },
   queries: { loadTasks, loadTask },
   mongooseSchema: {
     name: "task",

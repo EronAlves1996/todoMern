@@ -41,7 +41,6 @@ export default function Home() {
     const variables = data;
     commit({ variables, onCompleted: (r) => console.log(r) });
   };
-
   //todo: make the NewTaskForm appear only when the button with value "Nova Tarefa" is clicked
   return (
     <>

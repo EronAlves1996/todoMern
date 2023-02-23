@@ -6,6 +6,7 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
+import FlexComponent from "./shared/ui";
 
 const TO_HOME = "/";
 const UNLOGGED_MESSAGE = { msg: "Por favor, faça o login" };
@@ -54,29 +55,50 @@ export default function App() {
   useVerifyUserLogin({ user, setUser }, navigate);
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <HeaderBar />
-      <div className="flex-grow flex flex-col">
-        <OutletAsyncWrapper>
-          <Outlet context={{ user, setUser }} />
-        </OutletAsyncWrapper>
-        <FooterBar />
-      </div>
-    </div>
+    <>
+      <FlexComponent
+        flexProps={{ container: true, col: true, otherDefs: "min-h-screen" }}
+      >
+        <HeaderBar />
+        <FlexComponent flexProps={{ container: true, grow: true, col: true }}>
+          <OutletAsyncWrapper>
+            <Outlet context={{ user, setUser }} />
+          </OutletAsyncWrapper>
+          <FooterBar />
+        </FlexComponent>
+      </FlexComponent>
+    </>
   );
 }
 
 function HeaderBar() {
-  return <div className="bg-green-600 h-10 flex-grow-0"></div>;
+  return (
+    <>
+      <FlexComponent
+        flexProps={{ container: false, otherDefs: "h-10 bg-green-600" }}
+      />
+    </>
+  );
 }
 
 function FooterBar() {
-  return <div className="bg-green-600 h-36 flex-shrink-0"></div>;
+  return (
+    <>
+      <FlexComponent
+        flexProps={{
+          container: false,
+          otherDefs: "h-36 bg-green-600",
+          grow: false,
+          shrink: false,
+        }}
+      />{" "}
+    </>
+  );
 }
 
 function OutletAsyncWrapper({ children }: PropsWithChildren) {
   return (
-    <div className="flex-grow flex-shrink-0">
+    <FlexComponent flexProps={{ container: false, grow: true, shrink: false }}>
       <ErrorBoundary
         FallbackComponent={({ error, resetErrorBoundary }) => {
           resetErrorBoundary();
@@ -85,6 +107,6 @@ function OutletAsyncWrapper({ children }: PropsWithChildren) {
       >
         <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
       </ErrorBoundary>
-    </div>
+    </FlexComponent>
   );
 }

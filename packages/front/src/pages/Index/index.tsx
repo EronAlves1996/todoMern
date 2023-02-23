@@ -45,16 +45,19 @@ function Index() {
   const locationStateMsg = location.state?.msg;
 
   return (
-    <>
-      {locationStateMsg && <p>{locationStateMsg}</p>}
-      <LoginForm login={login} />
-      <div>
-        <a href="">Esqueceu sua senha?</a>
+    <div className="flex justify-end m-4">
+      {/* todo: goes for toast */}
+      <div className="flex-grow-0">
+        {locationStateMsg && <p>{locationStateMsg}</p>}
+        <LoginForm login={login} />
+        <div>
+          <a href="">Esqueceu sua senha?</a>
+        </div>
+        <div>
+          <Link to="/registrar">Criar nova conta</Link>
+        </div>
       </div>
-      <div>
-        <Link to="/registrar">Criar nova conta</Link>
-      </div>
-    </>
+    </div>
   );
 }
 

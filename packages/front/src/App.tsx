@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import { PropsWithChildren, Suspense, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import {
   NavigateFunction,
@@ -54,15 +54,37 @@ export default function App() {
   useVerifyUserLogin({ user, setUser }, navigate);
 
   return (
-    <ErrorBoundary
-      FallbackComponent={({ error, resetErrorBoundary }) => {
-        resetErrorBoundary();
-        return <></>;
-      }}
-    >
-      <Suspense fallback={<div>Loading...</div>}>
-        <Outlet context={{ user, setUser }} />
-      </Suspense>
-    </ErrorBoundary>
+    <div className="flex flex-col min-h-screen">
+      <HeaderBar />
+      <div className="flex-grow flex flex-col">
+        <OutletAsyncWrapper>
+          <Outlet context={{ user, setUser }} />
+        </OutletAsyncWrapper>
+        <FooterBar />
+      </div>
+    </div>
+  );
+}
+
+function HeaderBar() {
+  return <div className="bg-green-600 h-10 flex-grow-0"></div>;
+}
+
+function FooterBar() {
+  return <div className="bg-green-600 h-36 flex-shrink-0"></div>;
+}
+
+function OutletAsyncWrapper({ children }: PropsWithChildren) {
+  return (
+    <div className="flex-grow flex-shrink-0">
+      <ErrorBoundary
+        FallbackComponent={({ error, resetErrorBoundary }) => {
+          resetErrorBoundary();
+          return <></>;
+        }}
+      >
+        <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+      </ErrorBoundary>
+    </div>
   );
 }

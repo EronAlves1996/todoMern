@@ -6,6 +6,7 @@ import {
   useOutletContext,
 } from "react-router-dom";
 import { userOutletContext } from "../../App";
+import FlexContainer from "../../shared/ui";
 import LoginForm from "./LoginForm";
 
 function Index() {

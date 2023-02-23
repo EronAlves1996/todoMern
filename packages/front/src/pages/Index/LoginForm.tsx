@@ -9,7 +9,11 @@ function LoginForm({ login }: { login: SubmitHandler<FieldValues> }) {
   } = useForm();
 
   return (
-    <form onSubmit={handleSubmit(login)} role="form">
+    <form
+      onSubmit={handleSubmit(login)}
+      role="form"
+      className="flex flex-col gap-4"
+    >
       <LabeledInput
         label="E-mail"
         name="email"
@@ -22,13 +26,15 @@ function LoginForm({ login }: { login: SubmitHandler<FieldValues> }) {
         type="password"
         {...{ register }}
       />
-      <button
-        type="submit"
-        disabled={!isValid}
-        className="bg-green-600 rounded-xl p-2 text-white font-bold text-lg disabled:opacity-50 hover:outline-yellow-300 hover:outline"
-      >
-        Login
-      </button>
+      <div className="my-5">
+        <button
+          type="submit"
+          disabled={!isValid}
+          className="bg-green-600 rounded-xl p-2 text-white font-bold text-lg disabled:opacity-50 hover:outline-yellow-300 hover:outline"
+        >
+          Login
+        </button>
+      </div>
     </form>
   );
 }

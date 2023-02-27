@@ -44,7 +44,6 @@ function Index() {
         flexProps={{ container: true, col: true, grow: false }}
         className="gap-2"
       >
-        {/* TODO: goes for toast */}
         <LoginForm login={login} />
         <div>
           <a href="">Esqueceu sua senha?</a>

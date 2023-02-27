@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { graphql, loadQuery, useMutation } from "react-relay";
 import { useOutletContext } from "react-router-dom";
+import { toast } from "react-toastify";
 import { userOutletContext } from "../../../../App";
 import { RelayEnvironment } from "../../../../RelayEnvironment";
 import { FlexComponent, StyledButton } from "../../../../shared/ui";
@@ -40,7 +41,13 @@ export default function Home() {
   });
   const submit: SubmitHandler<FieldValues> = (data) => {
     const variables = data;
-    commit({ variables, onCompleted: (r) => console.log(r) });
+    commit({
+      variables,
+      onCompleted: (r) => console.log(r),
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    });
   };
   //todo: make the NewTaskForm appear only when the button with value "Nova Tarefa" is clicked
   return (

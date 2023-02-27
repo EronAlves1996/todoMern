@@ -6,7 +6,7 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { FlexComponent } from "./shared/ui";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -32,8 +32,10 @@ const useVerifyUserLogin = (
   useEffect(() => {
     if (user == null)
       verifyAnd(setUser).catch((_) => {
-        if (!(location.pathname == "/registrar" || location.pathname == "/"))
-          navigate(TO_HOME, { state: UNLOGGED_MESSAGE });
+        if (!(location.pathname == "/registrar" || location.pathname == "/")) {
+          toast.error(UNLOGGED_MESSAGE.msg);
+          navigate(TO_HOME);
+        }
       });
   }, []);
 };

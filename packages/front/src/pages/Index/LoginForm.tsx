@@ -1,6 +1,6 @@
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { LabeledInput } from "../../shared/LabeledInput";
-import { StyledButton } from "../../shared/ui";
+import { StyledButton, StyledForm } from "../../shared/ui";
 
 function LoginForm({ login }: { login: SubmitHandler<FieldValues> }) {
   const {
@@ -10,11 +10,7 @@ function LoginForm({ login }: { login: SubmitHandler<FieldValues> }) {
   } = useForm();
 
   return (
-    <form
-      onSubmit={handleSubmit(login)}
-      role="form"
-      className="flex flex-col gap-4"
-    >
+    <StyledForm onSubmit={handleSubmit(login)}>
       <LabeledInput
         label="E-mail"
         name="email"
@@ -32,7 +28,7 @@ function LoginForm({ login }: { login: SubmitHandler<FieldValues> }) {
           Login
         </StyledButton>
       </div>
-    </form>
+    </StyledForm>
   );
 }
 

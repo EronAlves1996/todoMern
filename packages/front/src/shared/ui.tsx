@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import { FormEventHandler, PropsWithChildren } from "react";
 
 type FlexProperties = {
   container: boolean;
@@ -59,5 +59,16 @@ export function StyledButton({
     >
       {children}
     </button>
+  );
+}
+
+export function StyledForm({
+  children,
+  onSubmit,
+}: PropsWithChildren<{ onSubmit: FormEventHandler<HTMLFormElement> }>) {
+  return (
+    <form {...{ onSubmit }} role="form" className="flex flex-col gap-4">
+      {children}
+    </form>
   );
 }

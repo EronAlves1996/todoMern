@@ -52,13 +52,17 @@ export function StyledButton({
   children,
   type,
   disabled,
+  onClick,
+  onMouseEnter,
 }: PropsWithChildren<{
   type: "button" | "submit" | "reset";
-  disabled: boolean;
+  disabled?: boolean;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  onMouseEnter?: MouseEventHandler<HTMLButtonElement>;
 }>) {
   return (
     <button
-      {...{ type, disabled }}
+      {...{ type, disabled, onClick, onMouseEnter }}
       className="bg-green-600 rounded-xl p-2 text-white font-bold text-lg disabled:opacity-50 hover:outline-yellow-300 hover:outline"
     >
       {children}

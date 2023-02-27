@@ -1,5 +1,6 @@
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { LabeledInput } from "../../shared/LabeledInput";
+import { StyledButton } from "../../shared/ui";
 
 function LoginForm({ login }: { login: SubmitHandler<FieldValues> }) {
   const {
@@ -27,13 +28,9 @@ function LoginForm({ login }: { login: SubmitHandler<FieldValues> }) {
         {...{ register }}
       />
       <div className="my-5">
-        <button
-          type="submit"
-          disabled={!isValid}
-          className="bg-green-600 rounded-xl p-2 text-white font-bold text-lg disabled:opacity-50 hover:outline-yellow-300 hover:outline"
-        >
+        <StyledButton type="submit" disabled={!isValid}>
           Login
-        </button>
+        </StyledButton>
       </div>
     </form>
   );

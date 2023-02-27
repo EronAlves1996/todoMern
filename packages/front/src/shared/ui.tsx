@@ -36,10 +36,28 @@ export function FlexComponent({
   );
 }
 
-export function LinkComponent({ children }: PropsWithChildren) {
+export function StyledLink({ children }: PropsWithChildren) {
   return (
     <span className="text-cyan-600 font-bold hover:text-cyan-500">
       {children}
     </span>
+  );
+}
+
+export function StyledButton({
+  children,
+  type,
+  disabled,
+}: PropsWithChildren<{
+  type: "button" | "submit" | "reset";
+  disabled: boolean;
+}>) {
+  return (
+    <button
+      {...{ type, disabled }}
+      className="bg-green-600 rounded-xl p-2 text-white font-bold text-lg disabled:opacity-50 hover:outline-yellow-300 hover:outline"
+    >
+      {children}
+    </button>
   );
 }

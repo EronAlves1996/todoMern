@@ -6,7 +6,7 @@ import {
   useOutletContext,
 } from "react-router-dom";
 import { userOutletContext } from "../../App";
-import { FlexComponent, LinkComponent } from "../../shared/ui";
+import { FlexComponent, StyledLink } from "../../shared/ui";
 import LoginForm from "./LoginForm";
 
 function Index() {
@@ -60,7 +60,7 @@ function Index() {
           </div>
           <div>
             <Link to="/registrar">
-              <LinkComponent>Criar Nova Conta</LinkComponent>
+              <StyledLink>Criar Nova Conta</StyledLink>
             </Link>
           </div>
         </FlexComponent>

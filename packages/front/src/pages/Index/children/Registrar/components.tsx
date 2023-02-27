@@ -24,7 +24,9 @@ export function NewPasswordForm({
         name="confirmedPassword"
         {...{ register }}
       />
-      {!equals && <p>Senhas não conferem</p>}
+      {!equals && (
+        <p className="text-rose-500 font-bold">Senhas não conferem!!</p>
+      )}
     </>
   );
 }

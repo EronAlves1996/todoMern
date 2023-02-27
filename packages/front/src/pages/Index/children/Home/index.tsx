@@ -4,6 +4,7 @@ import { graphql, loadQuery, useMutation } from "react-relay";
 import { useOutletContext } from "react-router-dom";
 import { userOutletContext } from "../../../../App";
 import { RelayEnvironment } from "../../../../RelayEnvironment";
+import { FlexComponent, StyledButton } from "../../../../shared/ui";
 import { NewTaskForm } from "./NewTaskForm";
 import { TaskDisplay } from "./TaskDisplay";
 import { HomeQuery } from "./__generated__/HomeQuery.graphql";
@@ -41,16 +42,21 @@ export default function Home() {
     const variables = data;
     commit({ variables, onCompleted: (r) => console.log(r) });
   };
-
   //todo: make the NewTaskForm appear only when the button with value "Nova Tarefa" is clicked
   return (
     <>
-      <button type="button">Nova Tarefa</button>
-      <NewTaskForm submitter={submit} />
+      <FlexComponent
+        flexProps={{ container: true, col: true, grow: true }}
+        className="self-stretch"
+      >
+        <StyledButton type="button">Nova Tarefa</StyledButton>
+        {/*TODO: goes for modal */}
+        <NewTaskForm submitter={submit} />
 
-      <Suspense fallback={<p>Carregando...</p>}>
-        <TaskDisplay query={taskQuery} gqlNode={loadTasks} />
-      </Suspense>
+        <Suspense fallback={<p>Carregando...</p>}>
+          <TaskDisplay query={taskQuery} gqlNode={loadTasks} />
+        </Suspense>
+      </FlexComponent>
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import { PropsWithChildren, Suspense, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import {
   NavigateFunction,
@@ -6,6 +6,7 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
+import { FlexComponent } from "./shared/ui";
 
 const TO_HOME = "/";
 const UNLOGGED_MESSAGE = { msg: "Por favor, faça o login" };
@@ -29,7 +30,7 @@ const useVerifyUserLogin = (
   useEffect(() => {
     if (user == null)
       verifyAnd(setUser).catch((_) => {
-        if (location.pathname != "/")
+        if (!(location.pathname == "/registrar" || location.pathname == "/"))
           navigate(TO_HOME, { state: UNLOGGED_MESSAGE });
       });
   }, []);
@@ -54,15 +55,62 @@ export default function App() {
   useVerifyUserLogin({ user, setUser }, navigate);
 
   return (
-    <ErrorBoundary
-      FallbackComponent={({ error, resetErrorBoundary }) => {
-        resetErrorBoundary();
-        return <></>;
-      }}
-    >
-      <Suspense fallback={<div>Loading...</div>}>
-        <Outlet context={{ user, setUser }} />
-      </Suspense>
-    </ErrorBoundary>
+    <>
+      <FlexComponent
+        flexProps={{ container: true, col: true }}
+        className="min-h-screen"
+      >
+        <HeaderBar />
+        <FlexComponent flexProps={{ container: true, grow: true, col: true }}>
+          <OutletAsyncWrapper>
+            <FlexComponent flexProps={{ container: true }} className="m-4">
+              <Outlet context={{ user, setUser }} />
+            </FlexComponent>
+          </OutletAsyncWrapper>
+          <FooterBar />
+        </FlexComponent>
+      </FlexComponent>
+    </>
+  );
+}
+
+function HeaderBar() {
+  return (
+    <>
+      <FlexComponent
+        flexProps={{ container: false }}
+        className="h-10 bg-green-600"
+      />
+    </>
+  );
+}
+
+function FooterBar() {
+  return (
+    <>
+      <FlexComponent
+        flexProps={{
+          container: false,
+          grow: false,
+          shrink: false,
+        }}
+        className="h-36 bg-green-600"
+      />{" "}
+    </>
+  );
+}
+
+function OutletAsyncWrapper({ children }: PropsWithChildren) {
+  return (
+    <FlexComponent flexProps={{ container: false, grow: true, shrink: false }}>
+      <ErrorBoundary
+        FallbackComponent={({ error, resetErrorBoundary }) => {
+          resetErrorBoundary();
+          return <></>;
+        }}
+      >
+        <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+      </ErrorBoundary>
+    </FlexComponent>
   );
 }

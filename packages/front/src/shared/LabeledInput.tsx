@@ -1,4 +1,5 @@
 import { LabeledInputProps } from "./Types";
+import { FlexComponent, inputClassName } from "./ui";
 
 export function LabeledInput({
   label,
@@ -7,9 +8,15 @@ export function LabeledInput({
   register,
 }: LabeledInputProps) {
   return (
-    <div>
-      <label htmlFor={name}>{label}</label>
-      <input {...{ type, ...register(name, { required: true }) }} id={name} />
-    </div>
+    <>
+      <FlexComponent flexProps={{ container: true, col: true }}>
+        <label htmlFor={name}>{label}</label>
+        <input
+          {...{ type, ...register(name, { required: true }) }}
+          id={name}
+          className={inputClassName}
+        />
+      </FlexComponent>
+    </>
   );
 }

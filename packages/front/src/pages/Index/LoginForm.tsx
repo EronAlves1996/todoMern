@@ -1,5 +1,6 @@
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { LabeledInput } from "../../shared/LabeledInput";
+import { StyledButton, StyledForm } from "../../shared/ui";
 
 function LoginForm({ login }: { login: SubmitHandler<FieldValues> }) {
   const {
@@ -9,7 +10,7 @@ function LoginForm({ login }: { login: SubmitHandler<FieldValues> }) {
   } = useForm();
 
   return (
-    <form onSubmit={handleSubmit(login)} role="form">
+    <StyledForm onSubmit={handleSubmit(login)}>
       <LabeledInput
         label="E-mail"
         name="email"
@@ -22,10 +23,12 @@ function LoginForm({ login }: { login: SubmitHandler<FieldValues> }) {
         type="password"
         {...{ register }}
       />
-      <button type="submit" disabled={!isValid}>
-        Login
-      </button>
-    </form>
+      <div className="my-5">
+        <StyledButton type="submit" disabled={!isValid}>
+          Login
+        </StyledButton>
+      </div>
+    </StyledForm>
   );
 }
 

@@ -10,6 +10,7 @@ import {
 import { useOutletContext } from "react-router-dom";
 import { userOutletContext } from "../../../../App";
 import { RelayEnvironment } from "../../../../RelayEnvironment";
+import { FlexComponent, StyledButton } from "../../../../shared/ui";
 import EditTaskForm from "./EditTaskForm";
 import { HomeQuery } from "./__generated__/HomeQuery.graphql";
 import { TaskDisplayQuery } from "./__generated__/TaskDisplayQuery.graphql";
@@ -42,33 +43,39 @@ function TaskRow({
   );
 
   return (
-    <div>
-      <p>{task?.description}</p>
-      <p>{task?.deadline}</p>
-      <p>{task?.isCompleted.toString()}</p>
-      <button
-        onClick={() => setShowTaskForm(!showTaskForm)}
-        onMouseEnter={() => {
-          setQuery(
-            loadQuery(
-              RelayEnvironment,
-              taskDisplayQuery,
-              {
-                taskId: task?._id!,
-              },
-              { fetchPolicy: "network-only" }
-            )
-          );
-        }}
+    <>
+      <FlexComponent
+        flexProps={{ container: true }}
+        className="items-stretch justify-evenly"
       >
-        {showTaskForm ? <span>Cancelar</span> : <span>Editar</span>}
-      </button>
-      <EditTaskForm
-        query={query!}
-        graphqlTag={taskDisplayQuery}
-        showControllers={[showTaskForm, setShowTaskForm]}
-      />
-    </div>
+        <p>{task?.description}</p>
+        <p>{task?.deadline}</p>
+        <p>{task?.isCompleted.toString()}</p>
+        <StyledButton
+          type="button"
+          onClick={() => setShowTaskForm(!showTaskForm)}
+          onMouseEnter={() => {
+            setQuery(
+              loadQuery(
+                RelayEnvironment,
+                taskDisplayQuery,
+                {
+                  taskId: task?._id!,
+                },
+                { fetchPolicy: "network-only" }
+              )
+            );
+          }}
+        >
+          {showTaskForm ? <span>Cancelar</span> : <span>Editar</span>}
+        </StyledButton>
+        <EditTaskForm
+          query={query!}
+          graphqlTag={taskDisplayQuery}
+          showControllers={[showTaskForm, setShowTaskForm]}
+        />
+      </FlexComponent>
+    </>
   );
 }
 
@@ -88,9 +95,11 @@ export function TaskDisplay({
   }, []);
   return (
     <>
-      <RefecthContext.Provider value={refetch}>
-        <TaskLoader query={queryRef} gqlNode={gqlNode} />
-      </RefecthContext.Provider>
+      <FlexComponent flexProps={{ container: true, col: true }}>
+        <RefecthContext.Provider value={refetch}>
+          <TaskLoader query={queryRef} gqlNode={gqlNode} />
+        </RefecthContext.Provider>
+      </FlexComponent>
     </>
   );
 }

@@ -24,7 +24,7 @@ function getFlexClassDef(props: FlexProperties) {
   return classDef.trim();
 }
 
-function FlexComponent({
+export function FlexComponent({
   children,
   flexProps,
   className,
@@ -36,4 +36,10 @@ function FlexComponent({
   );
 }
 
-export default FlexComponent;
+export function LinkComponent({ children }: PropsWithChildren) {
+  return (
+    <span className="text-cyan-600 font-bold hover:text-cyan-500">
+      {children}
+    </span>
+  );
+}

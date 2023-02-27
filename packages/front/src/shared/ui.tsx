@@ -5,7 +5,6 @@ type FlexProperties = {
   col?: boolean;
   shrink?: boolean;
   grow?: boolean;
-  otherDefs?: string;
 };
 
 function getFlexClassDef(props: FlexProperties) {
@@ -22,16 +21,19 @@ function getFlexClassDef(props: FlexProperties) {
     else classDef += "flex-grow-0 ";
   }
 
-  if (props.otherDefs) classDef += props.otherDefs;
-
   return classDef.trim();
 }
 
 function FlexComponent({
   children,
   flexProps,
-}: PropsWithChildren<{ flexProps: FlexProperties }>) {
-  return <div className={getFlexClassDef(flexProps)}>{children}</div>;
+  className,
+}: PropsWithChildren<{ flexProps: FlexProperties; className: string }>) {
+  return (
+    <div className={getFlexClassDef(flexProps) + " " + className}>
+      {children}
+    </div>
+  );
 }
 
 export default FlexComponent;

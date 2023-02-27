@@ -1,10 +1,8 @@
-import { useState } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler } from "react-hook-form";
 import { graphql, useMutation, UseMutationConfig } from "react-relay";
 import { NavigateFunction, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Disposable, MutationParameters, PayloadError } from "relay-runtime";
-import { LabeledInput } from "../../../../shared/LabeledInput";
-import { NewPasswordForm } from "./components";
 import { RegisterForm } from "./RegisterForm";
 
 const registrar = graphql`
@@ -27,13 +25,16 @@ const useIndexFormHandleSubmition = (
       response: {},
       errors: PayloadError[] | null
     ) => {
-      console.log(response);
-      navigate("/", { state: { msg: "Usuário registrado com sucesso" } });
+      toast.success("Usuário registrado com sucesso");
+      navigate("/");
     };
 
     commit({
       variables,
       onCompleted: forwardHandleOnCompleted,
+      onError: (error) => {
+        toast.error(error.message);
+      },
     });
   };
 };

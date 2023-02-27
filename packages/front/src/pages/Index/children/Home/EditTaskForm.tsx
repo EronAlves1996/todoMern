@@ -7,6 +7,7 @@ import {
   useMutation,
   usePreloadedQuery,
 } from "react-relay";
+import { toast } from "react-toastify";
 import {
   inputClassName,
   selectClassName,
@@ -67,8 +68,12 @@ function EditTaskForm({
               },
             },
             onCompleted: (res, err) => {
+              toast.success("Tarefa editada com sucesso");
               showControllers[1](false);
               refetch!();
+            },
+            onError: (error) => {
+              toast.error(error.message);
             },
           });
         })}

@@ -61,16 +61,20 @@ export function StyledButton({
   disabled,
   onClick,
   onMouseEnter,
+  styleType = "normal",
 }: PropsWithChildren<{
   type: "button" | "submit" | "reset";
   disabled?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   onMouseEnter?: MouseEventHandler<HTMLButtonElement>;
+  styleType?: "normal" | "danger";
 }>) {
   return (
     <button
       {...{ type, disabled, onClick, onMouseEnter }}
-      className="bg-green-600 rounded-xl p-2 text-white font-bold text-lg disabled:opacity-50 hover:outline-yellow-300 hover:outline"
+      className={`${
+        styleType === "normal" ? "bg-green-600" : "bg-red-600"
+      }  rounded-xl p-2 text-white font-bold text-lg disabled:opacity-50 hover:outline-yellow-300 hover:outline`}
     >
       {children}
     </button>

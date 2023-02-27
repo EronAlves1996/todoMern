@@ -47,23 +47,21 @@ function Index() {
 
   return (
     <>
-      <FlexComponent flexProps={{ container: true }} className="m-4">
-        <FlexComponent
-          flexProps={{ container: true, col: true, grow: false }}
-          className="gap-2"
-        >
-          {/* TODO: goes for toast */}
-          {locationStateMsg && <p>{locationStateMsg}</p>}
-          <LoginForm login={login} />
-          <div>
-            <a href="">Esqueceu sua senha?</a>
-          </div>
-          <div>
-            <Link to="/registrar">
-              <StyledLink>Criar Nova Conta</StyledLink>
-            </Link>
-          </div>
-        </FlexComponent>
+      <FlexComponent
+        flexProps={{ container: true, col: true, grow: false }}
+        className="gap-2"
+      >
+        {/* TODO: goes for toast */}
+        {locationStateMsg && <p>{locationStateMsg}</p>}
+        <LoginForm login={login} />
+        <div>
+          <a href="">Esqueceu sua senha?</a>
+        </div>
+        <div>
+          <Link to="/registrar">
+            <StyledLink>Criar Nova Conta</StyledLink>
+          </Link>
+        </div>
       </FlexComponent>
     </>
   );

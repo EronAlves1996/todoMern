@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { LabeledInput } from "../../../../shared/LabeledInput";
+import { StyledButton, StyledForm } from "../../../../shared/ui";
 import { NewPasswordForm } from "./components";
 
 export function RegisterForm({
@@ -20,7 +21,7 @@ export function RegisterForm({
     return equals;
   };
   return (
-    <form onSubmit={handleSubmit(submitter)} role="form">
+    <StyledForm onSubmit={handleSubmit(submitter)}>
       <LabeledInput label="Nome" type="text" name="name" {...{ register }} />
       <LabeledInput
         label="E-mail"
@@ -31,9 +32,9 @@ export function RegisterForm({
       <NewPasswordForm
         {...{ register, watch, passwordsAreEquals: checkPasswordsAsEquals }}
       />
-      <button type="submit" disabled={!isValid || !passwordsAreEquals}>
+      <StyledButton disabled={!isValid || !passwordsAreEquals} type="submit">
         Cadastrar
-      </button>
-    </form>
+      </StyledButton>
+    </StyledForm>
   );
 }

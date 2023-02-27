@@ -63,7 +63,9 @@ export default function App() {
         <HeaderBar />
         <FlexComponent flexProps={{ container: true, grow: true, col: true }}>
           <OutletAsyncWrapper>
-            <Outlet context={{ user, setUser }} />
+            <FlexComponent flexProps={{ container: true }} className="m-4">
+              <Outlet context={{ user, setUser }} />
+            </FlexComponent>
           </OutletAsyncWrapper>
           <FooterBar />
         </FlexComponent>

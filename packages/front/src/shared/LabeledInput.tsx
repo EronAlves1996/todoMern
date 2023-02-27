@@ -1,5 +1,5 @@
 import { LabeledInputProps } from "./Types";
-import { FlexComponent } from "./ui";
+import { FlexComponent, inputClassName } from "./ui";
 
 export function LabeledInput({
   label,
@@ -14,7 +14,7 @@ export function LabeledInput({
         <input
           {...{ type, ...register(name, { required: true }) }}
           id={name}
-          className="form-input rounded-xl p-2 border-yellow-900 border-opacity-40 focus:border-opacity-80 focus:border-green-500 focus:outline-none"
+          className={inputClassName}
         />
       </FlexComponent>
     </>

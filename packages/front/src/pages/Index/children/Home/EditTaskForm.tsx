@@ -7,6 +7,12 @@ import {
   useMutation,
   usePreloadedQuery,
 } from "react-relay";
+import {
+  inputClassName,
+  selectClassName,
+  StyledButton,
+  StyledForm,
+} from "../../../../shared/ui";
 import DeleteTaskButton from "./DeleteTaskButton";
 import { RefecthContext } from "./TaskDisplay";
 import { TaskDisplayQuery } from "./__generated__/TaskDisplayQuery.graphql";
@@ -48,7 +54,7 @@ function EditTaskForm({
 
   return (
     <>
-      <form
+      <StyledForm
         onSubmit={handleSubmit(({ description, deadline, isCompleted }) => {
           commmit({
             variables: {
@@ -71,23 +77,26 @@ function EditTaskForm({
         <label>Descrição</label>
         <input
           type="text"
+          className={inputClassName}
           {...register("description", { value: data.loadTask?.description })}
         />
         <label>Data de conclusão</label>
         <input
           type="date"
+          className={inputClassName}
           {...register("deadline", { value: formattedDate })}
         />
         <label>Concluída?</label>
         <select
           id="isCompleted"
+          className={selectClassName}
           {...register("isCompleted", { value: data.loadTask?.isCompleted })}
         >
           <option value="false">Não</option>
           <option value="true">Sim</option>
         </select>
-        <button type="submit">Salvar</button>
-      </form>
+        <StyledButton type="submit">Salvar</StyledButton>
+      </StyledForm>
       <DeleteTaskButton id={data.loadTask?._id as string} />
     </>
   );

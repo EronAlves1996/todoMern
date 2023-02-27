@@ -1,4 +1,4 @@
-import { FormEventHandler, PropsWithChildren } from "react";
+import { FormEventHandler, MouseEventHandler, PropsWithChildren } from "react";
 
 type FlexProperties = {
   container: boolean;
@@ -6,6 +6,13 @@ type FlexProperties = {
   shrink?: boolean;
   grow?: boolean;
 };
+
+const styledFormElsClassName =
+  "rounded-xl p-2 border-yellow-900 border-opacity-40 focus:border-opacity-80 focus:border-green-500 focus:outline-none";
+
+export const selectClassName = "form-select" + " " + styledFormElsClassName;
+
+export const inputClassName = "form-input" + " " + styledFormElsClassName;
 
 function getFlexClassDef(props: FlexProperties) {
   let classDef = "";

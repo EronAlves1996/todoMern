@@ -1,5 +1,6 @@
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { LabeledInput } from "../../../../shared/LabeledInput";
+import { StyledButton, StyledForm } from "../../../../shared/ui";
 
 export function NewTaskForm({
   submitter,
@@ -9,8 +10,8 @@ export function NewTaskForm({
   const { register, handleSubmit } = useForm();
 
   return (
-    <>
-      <form onSubmit={handleSubmit(submitter)} role="form">
+    <div>
+      <StyledForm onSubmit={handleSubmit(submitter)}>
         <LabeledInput
           label="Descrição"
           name="description"
@@ -23,8 +24,8 @@ export function NewTaskForm({
           type="date"
           register={register}
         />
-        <button type="submit">Salvar tarefa</button>
-      </form>
-    </>
+        <StyledButton type="submit">Salvar tarefa</StyledButton>
+      </StyledForm>
+    </div>
   );
 }

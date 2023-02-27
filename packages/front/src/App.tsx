@@ -6,7 +6,9 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import { FlexComponent } from "./shared/ui";
+import "react-toastify/dist/ReactToastify.css";
 
 const TO_HOME = "/";
 const UNLOGGED_MESSAGE = { msg: "Por favor, faça o login" };
@@ -70,6 +72,7 @@ export default function App() {
           <FooterBar />
         </FlexComponent>
       </FlexComponent>
+      <ToastContainer />
     </>
   );
 }

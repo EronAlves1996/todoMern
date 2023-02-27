@@ -77,7 +77,7 @@ function HeaderBar() {
     <>
       <FlexComponent
         flexProps={{ container: false }}
-        className="h10 bg-green-600"
+        className="h-10 bg-green-600"
       />
     </>
   );

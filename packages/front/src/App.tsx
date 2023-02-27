@@ -30,7 +30,7 @@ const useVerifyUserLogin = (
   useEffect(() => {
     if (user == null)
       verifyAnd(setUser).catch((_) => {
-        if (location.pathname != "/")
+        if (!(location.pathname == "/registrar" || location.pathname == "/"))
           navigate(TO_HOME, { state: UNLOGGED_MESSAGE });
       });
   }, []);

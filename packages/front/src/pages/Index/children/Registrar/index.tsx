@@ -3,6 +3,7 @@ import { graphql, useMutation, UseMutationConfig } from "react-relay";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Disposable, MutationParameters, PayloadError } from "relay-runtime";
+import Loading from "../../../../shared/Loading";
 import { RegisterForm } from "./RegisterForm";
 
 const registrar = graphql`
@@ -48,5 +49,10 @@ export default function Registrar() {
     submitter(data);
   };
 
-  return <RegisterForm submitter={submit} />;
+  return (
+    <>
+      <RegisterForm submitter={submit} />
+      {isInFlight && <Loading />}
+    </>
+  );
 }

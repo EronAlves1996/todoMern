@@ -9,6 +9,7 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import { FlexComponent } from "./shared/ui";
 import "react-toastify/dist/ReactToastify.css";
+import Loading from "./shared/Loading";
 
 const TO_HOME = "/";
 const UNLOGGED_MESSAGE = { msg: "Por favor, faça o login" };
@@ -114,7 +115,7 @@ function OutletAsyncWrapper({ children }: PropsWithChildren) {
           return <></>;
         }}
       >
-        <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+        <Suspense fallback={<Loading />}>{children}</Suspense>
       </ErrorBoundary>
     </FlexComponent>
   );

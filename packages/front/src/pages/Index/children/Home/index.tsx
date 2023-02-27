@@ -5,6 +5,7 @@ import { useOutletContext } from "react-router-dom";
 import { toast } from "react-toastify";
 import { userOutletContext } from "../../../../App";
 import { RelayEnvironment } from "../../../../RelayEnvironment";
+import Loading from "../../../../shared/Loading";
 import { FlexComponent, StyledButton } from "../../../../shared/ui";
 import { NewTaskForm } from "./NewTaskForm";
 import { TaskDisplay } from "./TaskDisplay";
@@ -59,8 +60,9 @@ export default function Home() {
         <StyledButton type="button">Nova Tarefa</StyledButton>
         {/*TODO: goes for modal */}
         <NewTaskForm submitter={submit} />
+        {isInFlight && <Loading />}
 
-        <Suspense fallback={<p>Carregando...</p>}>
+        <Suspense fallback={<Loading />}>
           <TaskDisplay query={taskQuery} gqlNode={loadTasks} />
         </Suspense>
       </FlexComponent>

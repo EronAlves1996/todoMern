@@ -6,7 +6,7 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import FlexComponent from "./shared/ui";
+import { FlexComponent } from "./shared/ui";
 
 const TO_HOME = "/";
 const UNLOGGED_MESSAGE = { msg: "Por favor, faça o login" };
@@ -57,7 +57,8 @@ export default function App() {
   return (
     <>
       <FlexComponent
-        flexProps={{ container: true, col: true, otherDefs: "min-h-screen" }}
+        flexProps={{ container: true, col: true }}
+        className="min-h-screen"
       >
         <HeaderBar />
         <FlexComponent flexProps={{ container: true, grow: true, col: true }}>
@@ -75,7 +76,8 @@ function HeaderBar() {
   return (
     <>
       <FlexComponent
-        flexProps={{ container: false, otherDefs: "h-10 bg-green-600" }}
+        flexProps={{ container: false }}
+        className="h10 bg-green-600"
       />
     </>
   );
@@ -87,10 +89,10 @@ function FooterBar() {
       <FlexComponent
         flexProps={{
           container: false,
-          otherDefs: "h-36 bg-green-600",
           grow: false,
           shrink: false,
         }}
+        className="h-36 bg-green-600"
       />{" "}
     </>
   );

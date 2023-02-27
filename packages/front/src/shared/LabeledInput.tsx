@@ -1,5 +1,5 @@
 import { LabeledInputProps } from "./Types";
-import FlexComponent from "./ui";
+import { FlexComponent } from "./ui";
 
 export function LabeledInput({
   label,

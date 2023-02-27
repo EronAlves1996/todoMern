@@ -28,7 +28,7 @@ export function FlexComponent({
   children,
   flexProps,
   className,
-}: PropsWithChildren<{ flexProps: FlexProperties; className: string }>) {
+}: PropsWithChildren<{ flexProps: FlexProperties; className?: string }>) {
   return (
     <div className={getFlexClassDef(flexProps) + " " + className}>
       {children}

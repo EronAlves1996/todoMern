@@ -6,6 +6,7 @@ import {
   useOutletContext,
 } from "react-router-dom";
 import { userOutletContext } from "../../App";
+import { FlexComponent, LinkComponent } from "../../shared/ui";
 import LoginForm from "./LoginForm";
 
 function Index() {
@@ -45,23 +46,26 @@ function Index() {
   const locationStateMsg = location.state?.msg;
 
   return (
-    <div className="flex m-4">
-      <div className="flex-grow-0 flex flex-col gap-2">
-        {/* TODO: goes for toast */}
-        {locationStateMsg && <p>{locationStateMsg}</p>}
-        <LoginForm login={login} />
-        <div>
-          <a href="">Esqueceu sua senha?</a>
-        </div>
-        <div>
-          <Link to="/registrar">
-            <span className="text-cyan-600 font-bold hover:text-cyan-500">
-              Criar nova conta
-            </span>
-          </Link>
-        </div>
-      </div>
-    </div>
+    <>
+      <FlexComponent flexProps={{ container: true }} className="m-4">
+        <FlexComponent
+          flexProps={{ container: true, col: true, grow: false }}
+          className="gap-2"
+        >
+          {/* TODO: goes for toast */}
+          {locationStateMsg && <p>{locationStateMsg}</p>}
+          <LoginForm login={login} />
+          <div>
+            <a href="">Esqueceu sua senha?</a>
+          </div>
+          <div>
+            <Link to="/registrar">
+              <LinkComponent>Criar Nova Conta</LinkComponent>
+            </Link>
+          </div>
+        </FlexComponent>
+      </FlexComponent>
+    </>
   );
 }
 

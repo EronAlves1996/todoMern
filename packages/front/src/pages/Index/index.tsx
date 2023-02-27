@@ -1,16 +1,11 @@
 import { FieldValues, SubmitHandler } from "react-hook-form";
-import {
-  Link,
-  useLocation,
-  useNavigate,
-  useOutletContext,
-} from "react-router-dom";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
+import { toast } from "react-toastify";
 import { userOutletContext } from "../../App";
 import { FlexComponent, StyledLink } from "../../shared/ui";
 import LoginForm from "./LoginForm";
 
 function Index() {
-  const location = useLocation();
   const outletContext = useOutletContext<userOutletContext>();
   const navigate = useNavigate();
   if (outletContext.user !== null) {
@@ -38,12 +33,10 @@ function Index() {
       })
       .catch((err) => {
         if (err instanceof Error) {
-          navigate("/", { state: { msg: err.message } });
+          toast(err.message);
         }
       });
   };
-
-  const locationStateMsg = location.state?.msg;
 
   return (
     <>
@@ -52,7 +45,6 @@ function Index() {
         className="gap-2"
       >
         {/* TODO: goes for toast */}
-        {locationStateMsg && <p>{locationStateMsg}</p>}
         <LoginForm login={login} />
         <div>
           <a href="">Esqueceu sua senha?</a>
